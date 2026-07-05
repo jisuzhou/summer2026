@@ -1,0 +1,2399 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>暑假成长积分银行</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#2f947f">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-512.png">
+<style>
+:root {
+  color-scheme: light;
+  --ink: #183b34;
+  --muted: #6c7d72;
+  --leaf: #2f947f;
+  --leaf-dark: #16705e;
+  --mint: #dff2df;
+  --cream: #fffaf0;
+  --paper: rgba(255, 255, 248, 0.92);
+  --gold: #e7ac2c;
+  --river: #9ed8cd;
+  --sky: #e8f6ee;
+  --rose: #ef8f72;
+  --blue: #4c88b8;
+  --shadow: 0 18px 48px rgba(41, 76, 55, 0.14);
+  --soft-shadow: 0 10px 28px rgba(44, 76, 57, 0.1);
+  --radius: 8px;
+  --font: "Nunito", "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--ink);font-family:var(--font);
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255,226,132,0.34), transparent 18rem),
+    radial-gradient(circle at 86% 18%, rgba(146,211,197,0.36), transparent 20rem),
+    linear-gradient(180deg, #f7f2df 0%, #e7f5e9 54%, #f8f0d9 100%);
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:0.32;
+  background-image:
+    linear-gradient(90deg, rgba(47,148,127,0.12) 1px, transparent 1px),
+    linear-gradient(rgba(47,148,127,0.1) 1px, transparent 1px);
+  background-size:36px 36px;
+  mask-image:linear-gradient(to bottom, transparent, #000 18%, #000 78%, transparent);
+}
+button,input,textarea,select{font:inherit}
+button{border:0;cursor:pointer}
+.app{min-height:100vh}
+.topbar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:18px 28px;
+  background:rgba(255,253,243,.88);border-bottom:1px solid rgba(47,112,94,.12);
+  backdrop-filter:blur(18px);box-shadow:0 4px 22px rgba(57,88,65,.08);
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:255px}
+.brand-mark{
+  width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  background:#f7d268;border:3px solid #2f947f;
+  box-shadow:inset 0 0 0 5px #fff7d7,0 6px 14px rgba(47,112,94,.15);
+  position:relative;
+}
+.brand-mark::before,.brand-mark::after{
+  content:"";position:absolute;background:var(--leaf-dark);border-radius:999px;
+}
+.brand-mark::before{width:3px;height:16px;left:50%;top:50%;transform:translate(-50%,-100%);transform-origin:bottom center}
+.brand-mark::after{width:3px;height:10px;left:50%;top:50%;transform:translate(-50%,-100%) rotate(90deg);transform-origin:bottom center}
+.brand h1{margin:0;font-size:clamp(20px,2.2vw,30px);line-height:1.05;letter-spacing:0}
+.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.nav{display:flex;justify-content:center;gap:6px;flex:1}
+.nav button{
+  padding:11px 16px;border-radius:999px;color:#46645a;
+  background:transparent;transition:180ms ease;white-space:nowrap;
+}
+.nav button[aria-selected="true"]{color:#fff;background:var(--leaf);box-shadow:0 8px 18px rgba(47,148,127,.22)}
+.profile{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:300px}
+.profile-child-btn{padding:8px 16px;border-radius:8px;background:#fff;border:2px dashed rgba(47,112,94,.3);color:var(--leaf-dark);font-weight:800;font-size:13px;cursor:pointer;transition:150ms;white-space:nowrap}
+.profile-child-btn:hover{border-color:var(--leaf);background:#f0fdf4}
+.profile-parent-btn{padding:8px 16px;border-radius:8px;background:linear-gradient(135deg,#ff9a56,#ff6b35);border:none;color:#fff;font-weight:800;font-size:13px;cursor:pointer;transition:150ms;white-space:nowrap;box-shadow:0 4px 12px rgba(255,107,53,.3)}
+.profile-parent-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(255,107,53,.4)}
+.coin-pill{
+  display:flex;align-items:center;gap:9px;padding:9px 14px;border-radius:999px;
+  background:#fff6cf;box-shadow:inset 0 0 0 1px rgba(202,148,31,.22);font-weight:800;
+  cursor:pointer;transition:150ms;
+}
+.coin-pill:hover{box-shadow:inset 0 0 0 1px rgba(202,148,31,.4),0 4px 12px rgba(202,148,31,.2)}
+.coin{
+  width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;
+  color:#906013;background:radial-gradient(circle at 35% 30%,#fff6bd,#e5a42a 70%);
+  border:2px solid #c98c24;box-shadow:inset 0 0 0 2px rgba(255,255,255,.36);font-size:12px;font-weight:900;
+  flex-shrink:0;
+}
+.avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,#ffd7aa 0 25%,transparent 26%),
+    radial-gradient(circle at 50% 42%,#4f8b61 0 44%,#d7efcf 45% 100%);
+  border:3px solid #fff;box-shadow:0 6px 16px rgba(47,80,62,.16);
+}
+.page{width:min(1560px,calc(100% - 40px));margin:24px auto 46px}
+.layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.stack{display:grid;gap:16px}
+.panel{border-radius:var(--radius);background:var(--paper);border:1px solid rgba(64,116,91,.14);box-shadow:var(--soft-shadow);overflow:hidden}
+.panel-pad{padding:20px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.panel-title{display:flex;align-items:center;gap:9px;margin:0;font-size:20px;line-height:1.1}
+.small-icon{
+  width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;
+  color:var(--leaf-dark);background:#e3f4d9;border:1px solid rgba(47,148,127,.18);
+}
+.muted{color:var(--muted)}
+.field-label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+.child-field{
+  width:100%;padding:12px 13px;border:1px solid rgba(47,112,94,.22);
+  border-radius:8px;color:var(--ink);background:#fffdf5;outline:none;
+}
+.child-field:focus,textarea:focus,input:focus{border-color:var(--leaf);box-shadow:0 0 0 4px rgba(47,148,127,.12)}
+.balance-card{
+  display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+  background:linear-gradient(135deg, rgba(255,249,219,.95), rgba(225,244,220,.95)),
+    repeating-linear-gradient(45deg, transparent 0 11px, rgba(47,148,127,.04) 12px 13px);
+}
+.balance-number{display:flex;align-items:center;gap:10px;margin:4px 0;font-size:42px;line-height:1;font-weight:900}
+.balance-number .coin{width:28px;height:28px;font-size:13px}
+.backpack{
+  width:80px;height:90px;position:relative;
+  border-radius:16px 16px 12px 12px;
+  background:linear-gradient(160deg,#4f8e80,#2f665e);
+  box-shadow:inset 0 0 0 4px rgba(255,255,255,.18),0 10px 20px rgba(39,82,70,.16);
+  border:3px solid #8b6429;
+  align-self:center;
+}
+.backpack::before{
+  content:"";position:absolute;left:50%;top:-18px;width:36px;height:28px;
+  transform:translateX(-50%);
+  border:6px solid #9f6c2d;border-bottom:0;border-radius:24px 24px 0 0;
+}
+.backpack::after{
+  content:"";position:absolute;left:12px;right:12px;top:28px;bottom:12px;border-radius:10px;
+  background:#f4d775;border:2px solid #8b6429;
+}
+.primary,.secondary,.ghost{min-height:42px;padding:11px 16px;border-radius:8px;font-weight:800;transition:transform 160ms ease,box-shadow 160ms ease,background 160ms ease}
+.primary{color:#fff;background:var(--leaf);box-shadow:0 10px 22px rgba(47,148,127,.22)}
+.primary:hover,.secondary:hover,.ghost:hover{transform:translateY(-1px)}
+.secondary{color:var(--leaf-dark);background:#e2f5df;box-shadow:inset 0 0 0 1px rgba(47,148,127,.16)}
+.ghost{color:#48675c;background:rgba(255,255,255,.52);box-shadow:inset 0 0 0 1px rgba(47,112,94,.12)}
+.danger{color:#9b503e;background:#fff0e9;box-shadow:inset 0 0 0 1px rgba(239,143,114,.28)}
+.daily-list{display:grid;gap:10px}
+.goals-list{display:grid;gap:10px}
+.goal-item{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:center;padding:12px;border-radius:8px;background:rgba(255,255,255,.66);border:1px solid rgba(47,112,94,.1)}
+.goal-item input[type="checkbox"]{width:22px;height:22px;accent-color:var(--leaf)}
+.goal-item .goal-label{font-size:13px;font-weight:800;color:var(--leaf-dark)}
+.goal-item .goal-input{flex:1;font-size:13px;border:none;background:transparent;outline:none;color:var(--ink)}
+.goal-item .goal-input::placeholder{color:var(--muted)}
+.mini-task{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,.66);border:1px solid rgba(47,112,94,.1)}
+.mini-task input,.task-row input{width:22px;height:22px;accent-color:var(--leaf)}
+.mini-task strong{display:block;font-size:14px}
+.mini-task span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.point{display:inline-flex;align-items:center;gap:5px;color:#8a671b;font-weight:900;white-space:nowrap}
+.message{display:grid;gap:8px;padding:14px;border-radius:8px;background:#fff8d9;border:1px solid rgba(214,166,45,.28);color:#684e17;line-height:1.55}
+.main-grid{display:grid;gap:20px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px;align-items:stretch}
+.map-card{
+  min-height:520px;position:relative;overflow:hidden;padding:24px;
+  background:linear-gradient(135deg, rgba(255,249,218,.84), rgba(222,241,205,.8)),
+    radial-gradient(circle at 78% 24%, rgba(148,207,186,.34), transparent 21rem),
+    repeating-linear-gradient(-12deg, rgba(47,148,127,.04) 0 9px, transparent 10px 24px);
+  box-shadow:var(--shadow);
+}
+.map-card::before{
+  content:"";position:absolute;inset:18px;pointer-events:none;
+  border:2px dashed rgba(97,132,70,.2);border-radius:8px;
+}
+.map-card::after{
+  content:"";position:absolute;left:-42px;right:-42px;bottom:-110px;height:205px;pointer-events:none;
+  background:radial-gradient(ellipse at 22% 50%,rgba(73,153,126,.2),transparent 34%),
+    radial-gradient(ellipse at 72% 45%,rgba(231,172,44,.18),transparent 38%),
+    linear-gradient(180deg,rgba(129,182,119,.18),rgba(129,182,119,0));
+}
+.map-title{position:relative;z-index:3;max-width:700px;padding:12px 14px;color:#375537;background:rgba(255,250,224,.76);border:1px solid rgba(91,126,72,.18);border-radius:8px;backdrop-filter:blur(6px)}
+.map-title h2{margin:0;font-size:clamp(24px,3vw,42px);line-height:1.05}
+.map-title p{margin:7px 0 0;color:#657756}
+.quest-board{position:relative;z-index:4;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:20px;margin-top:22px}
+.quest-route{position:relative;min-height:380px}
+.quest-route::before{
+  content:"";position:absolute;inset:34px 40px 46px;border-radius:48% 52% 46% 54%;
+  border:14px solid rgba(255,251,230,.95);border-left-color:transparent;border-bottom-color:transparent;
+  transform:rotate(-8deg);box-shadow:0 0 0 2px rgba(132,126,80,.13),0 12px 22px rgba(79,95,56,.09);
+}
+.checkpoint{
+  position:absolute;z-index:2;width:160px;min-height:110px;padding:10px;border-radius:8px;
+  color:var(--ink);background:rgba(255,253,242,.94);border:2px solid rgba(87,121,66,.18);
+  box-shadow:0 14px 24px rgba(73,95,59,.14);text-align:left;transition:transform 160ms ease,box-shadow 160ms ease,border-color 160ms ease;
+}
+.checkpoint:hover,.checkpoint.active{transform:translateY(-3px);border-color:rgba(47,148,127,.58);box-shadow:0 18px 34px rgba(47,112,94,.18)}
+.checkpoint.done{background:linear-gradient(180deg,#fffdf2,#e9f7df)}
+.checkpoint-number{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;color:#fff;background:var(--leaf);font-weight:900;box-shadow:inset 0 0 0 3px rgba(255,255,255,.22)}
+.checkpoint strong{display:block;margin-top:8px;font-size:20px;line-height:1.05}
+.checkpoint small{display:block;margin-top:6px;color:var(--muted);line-height:1.35;font-size:12px}
+.stars{margin-top:10px;color:#d7ac34;font-size:15px;letter-spacing:0}
+.star-empty{color:rgba(83,102,84,.24)}
+.gate-task-panel{
+  align-self:stretch;min-height:338px;padding:18px;border-radius:8px;
+  background:rgba(255,255,248,.88);border:1px solid rgba(47,112,94,.15);
+  box-shadow:0 12px 30px rgba(54,82,61,.12);
+}
+.gate-task-panel h3{margin:0;font-size:26px;line-height:1.1}
+.gate-task-panel p{margin:8px 0 14px;color:var(--muted);line-height:1.5}
+.gate-task-list{display:grid;gap:9px;max-height:208px;overflow:auto;padding-right:3px}
+.gate-task{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;min-height:46px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.75);border:1px solid rgba(47,112,94,.1)}
+.gate-task input{width:20px;height:20px;accent-color:var(--leaf)}
+.gate-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.treasure-panel{
+  display:grid;gap:16px;align-content:start;
+  background:linear-gradient(180deg,rgba(255,252,240,.94),rgba(243,250,233,.94)),
+    radial-gradient(circle at 80% 28%,rgba(231,172,44,.18),transparent 11rem);
+}
+.chest{width:190px;height:140px;margin:4px auto 0;position:relative;filter:drop-shadow(0 18px 16px rgba(78,58,23,.18))}
+.chest::before{
+  content:"";position:absolute;left:23px;top:16px;width:145px;height:63px;
+  border-radius:72px 72px 8px 8px;background:linear-gradient(#b97932,#8b5524);
+  border:5px solid #6e4019;box-shadow:inset 0 13px 0 rgba(255,225,126,.32);
+}
+.chest::after{
+  content:"";position:absolute;left:14px;top:68px;width:162px;height:61px;
+  border-radius:8px;background:linear-gradient(#ba742d,#8d5422);
+  border:5px solid #6e4019;box-shadow:inset 0 14px 0 rgba(255,214,113,.25);
+}
+.lock{position:absolute;z-index:2;left:79px;top:62px;width:38px;height:48px;border-radius:7px;background:#f2c85c;border:4px solid #6e4019}
+.lock::before{content:"";position:absolute;left:8px;top:10px;width:12px;height:18px;border:4px solid #6e4019;border-bottom:0;border-radius:12px 12px 0 0}
+.progress-track{height:12px;border-radius:999px;background:rgba(80,108,76,.13);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--leaf),#8ebf55);transition:width 260ms ease}
+.section{display:none}
+.section.active{display:block}
+.section-shell{padding:22px}
+.section-heading{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-heading h2{margin:0;font-size:clamp(25px,3vw,38px);line-height:1.05}
+.section-heading p{margin:7px 0 0;color:var(--muted)}
+.category-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.category-tabs button{padding:9px 12px;border-radius:999px;color:#4f665d;background:rgba(255,255,255,.68);border:1px solid rgba(47,112,94,.12);font-weight:800}
+.category-tabs button.active{color:#fff;background:var(--leaf)}
+.tasks-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.task-row{
+  display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;
+  padding:14px;min-height:78px;border-radius:8px;
+  background:rgba(255,255,255,.74);border:1px solid rgba(47,112,94,.12);transition:160ms ease;
+}
+.task-row.done{background:#ecf8e8;border-color:rgba(47,148,127,.28)}
+.task-row strong{display:block;margin-bottom:3px}
+.tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;color:#477163;background:#e4f3dc;font-size:12px;font-weight:800}
+.insight-grid,.reward-grid,.review-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.works-grid{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:16px;align-items:start}
+.metric,.reward-card,.review-card,.work-card,.statement{
+  border-radius:var(--radius);padding:18px;
+  background:rgba(255,255,255,.72);border:1px solid rgba(47,112,94,.12);
+  box-shadow:0 6px 18px rgba(45,83,61,.07);
+}
+.metric b{display:block;margin-top:8px;font-size:32px;line-height:1}
+.reward-card{display:grid;gap:13px;align-content:start;min-height:250px}
+.reward-level{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.reward-level h3{margin:0;font-size:21px}
+.reward-card ul{margin:0;padding-left:18px;color:#4d6259;line-height:1.8}
+.reward-editor{padding-top:2px;border-top:1px dashed rgba(47,112,94,.18)}
+.reward-editor summary{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:38px;
+  padding:8px 10px;border-radius:8px;color:var(--leaf-dark);background:#e7f4df;
+  font-weight:900;cursor:pointer;list-style:none;
+}
+.reward-editor summary::-webkit-details-marker{display:none}
+.reward-editor summary::after{content:"展开";flex:0 0 auto;color:#5d766b;font-size:12px;font-weight:800}
+.reward-editor[open] summary::after{content:"收起"}
+.reward-editor-body{display:grid;gap:8px;margin-top:10px}
+.reward-editor-body label{color:var(--muted);font-size:13px;font-weight:800}
+.reward-editor textarea{min-height:104px;font-size:14px}
+textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:8px;border:1px solid rgba(47,112,94,.18);background:rgba(255,255,255,.82);color:var(--ink);outline:none;line-height:1.6}
+.review-card h3,.work-card h3{margin:0 0 10px;font-size:18px}
+.work-card{min-width:0}
+.work-archive-card{min-width:0}
+.review-actions,.work-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.timeline{display:grid;gap:11px;max-height:250px;overflow:auto;padding-right:4px}
+.timeline-item{display:grid;gap:4px;padding:12px;border-radius:8px;background:#fffdf5;border:1px solid rgba(47,112,94,.1)}
+.timeline-item time{color:var(--muted);font-size:12px}
+.statement{grid-column:1/-1;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:#fff7da;color:#664c16;border-color:rgba(214,166,45,.24);line-height:1.7}
+.leaf-badge{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--leaf);color:#fff;font-weight:900}
+.work-form{display:grid;gap:10px}
+.work-form input,.work-form input[type="file"],.work-form select{
+  min-height:42px;padding:10px 12px;border-radius:8px;
+  border:1px solid rgba(47,112,94,.18);background:rgba(255,255,255,.82);color:var(--ink);outline:none;
+}
+.upload-box{display:grid;gap:8px;padding:12px;border-radius:8px;background:rgba(226,245,223,.62);border:1px dashed rgba(47,148,127,.32)}
+.upload-box small{color:var(--muted);line-height:1.45}
+.media-preview{display:none;overflow:hidden;border-radius:8px;background:#f4f0db;border:1px solid rgba(47,112,94,.14)}
+.media-preview.show{display:block}
+.media-preview img,.media-preview video,.work-media img,.work-media video{display:block;width:100%;max-height:240px;object-fit:cover}
+.work-media{overflow:hidden;margin-top:8px;border-radius:8px;border:1px solid rgba(47,112,94,.12);background:#f4f0db}
+.file-chip{display:inline-flex;align-items:center;width:fit-content;max-width:100%;padding:5px 9px;border-radius:999px;color:#4e665c;background:#e7f4df;font-size:12px;font-weight:800}
+.empty{color:var(--muted);padding:18px;border-radius:8px;background:rgba(255,255,255,.58);border:1px dashed rgba(47,112,94,.2)}
+.toast{
+  position:fixed;left:50%;bottom:24px;z-index:50;
+  transform:translate(-50%,24px);opacity:0;pointer-events:none;
+  max-width:min(520px,calc(100% - 32px));padding:13px 18px;border-radius:999px;
+  color:#fff;background:#236f5f;box-shadow:0 16px 40px rgba(29,76,66,.24);
+  transition:220ms ease;text-align:center;font-weight:800;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.firework-layer{position:fixed;inset:0;z-index:45;pointer-events:none;overflow:hidden}
+.spark{
+  position:absolute;left:var(--x);top:var(--y);width:10px;height:10px;border-radius:50%;
+  background:var(--spark-color);box-shadow:0 0 12px var(--spark-color);
+  animation:spark-pop 780ms ease-out forwards;transform:translate(-50%,-50%);
+}
+@keyframes spark-pop{0%{opacity:1;transform:translate(-50%,-50%) scale(.3)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.95)}}
+
+/* 补卡/日历样式 */
+.cal-row{display:flex;gap:4px;margin-top:8px}
+.cal-cell{
+  flex:1;min-height:36px;display:grid;place-items:center;
+  border-radius:6px;font-size:12px;font-weight:700;
+  background:#e7f4df;border:1px solid rgba(47,148,127,.15);
+  cursor:pointer;transition:120ms;
+}
+.cal-cell.has{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+.cal-cell.today{border:2px solid var(--gold);box-shadow:0 0 0 2px rgba(231,172,44,.3)}
+.cal-cell.locked{opacity:.4;cursor:not-allowed}
+.cal-cell-label{font-size:10px;font-weight:400;opacity:.8;margin-top:1px}
+
+/* 打卡日历（网格格式+任务列表） */
+.mini-calendar-wrap{
+  margin-top:14px;border-radius:10px;background:rgba(255,255,248,.88);
+  border:1px solid rgba(47,148,127,.12);padding:10px;
+}
+.mini-cal-header{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-bottom:8px;
+}
+.mini-cal-header h3{
+  margin:0;font-size:13px;color:var(--leaf-dark);font-weight:800;
+}
+.mini-cal-nav{
+  display:flex;gap:4px;
+}
+.mini-cal-nav button{
+  width:24px;height:24px;border-radius:4px;
+  background:rgba(47,148,127,.08);border:1px solid rgba(47,148,127,.15);
+  color:var(--leaf-dark);font-weight:700;font-size:12px;
+}
+.mini-cal-nav button:hover{background:rgba(47,148,127,.15)}
+.mini-cal-weekdays{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;
+}
+.mini-cal-weekdays>div{
+  text-align:center;font-size:11px;font-weight:700;color:var(--muted);
+  padding:4px 0;
+}
+.mini-cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:2px;
+}
+.mini-cal-cell{
+  min-height:50px;padding:4px;border-radius:4px;
+  background:#f5f9f6;border:1px solid rgba(47,148,127,.1);
+  cursor:pointer;transition:background 150ms;
+  display:flex;flex-direction:column;font-size:10px;
+}
+.mini-cal-cell:hover{background:#e8f4e6}
+.mini-cal-cell.today{
+  background:#fff6cf;border-color:var(--gold);
+}
+.mini-cal-cell.has{background:#e0f2dd;border-color:var(--leaf)}
+.mini-cal-cell.empty{
+  background:transparent;border-color:transparent;cursor:default;min-height:auto;
+}
+.mini-cal-cell.empty:hover{background:transparent}
+.mini-cal-cell-date{
+  font-weight:800;color:var(--ink);margin-bottom:2px;
+}
+.mini-cal-cell.today .mini-cal-cell-date{color:var(--gold)}
+.mini-cal-cell-tasks{
+  flex:1;overflow:hidden;
+}
+.mini-cal-cell-task{
+  display:flex;align-items:center;gap:2px;margin-bottom:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mini-cal-cell-task input[type="checkbox"]{
+  width:10px;height:10px;accent-color:var(--leaf) !important;flex-shrink:0;
+  color:var(--leaf) !important;
+}
+.mini-cal-cell-task input[type="checkbox"]:checked{
+  accent-color:var(--leaf) !important;
+}
+.mini-cal-cell-task input[type="checkbox"]:disabled{
+  accent-color:var(--leaf) !important;opacity:1;filter:none;
+}
+.mini-cal-cell-task input[type="checkbox"]:checked:disabled{
+  accent-color:var(--leaf) !important;opacity:1;filter:none;
+}
+.mini-cal-cell-task input[type="checkbox"]:disabled::before{
+  background-color:var(--leaf) !important;
+}
+.mini-cal-cell-task span{
+  color:var(--ink);font-size:9px;line-height:1.2;
+}
+.mini-cal-cell-more{
+  color:var(--leaf-dark);font-weight:700;font-size:9px;
+  margin-top:1px;
+}
+  text-align:center;padding:16px;color:var(--muted);font-size:12px;
+}
+
+/* 奖励项 */
+.reward-items{display:grid;gap:6px}
+.reward-item-row{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;
+  background:rgba(255,255,255,.6);border:1px solid rgba(47,148,127,.1);
+  cursor:pointer;transition:120ms;font-size:13px;
+}
+.reward-item-row:hover{border-color:rgba(47,148,127,.3);background:#fff}
+.reward-item-row.selected{border-color:var(--leaf);background:#e7f4df}
+.reward-item-row input[type=radio]{accent-color:var(--leaf);width:16px;height:16px;flex-shrink:0}
+.redeem-btn,.continue-btn{
+  min-height:40px;padding:9px 14px;border-radius:8px;font-weight:800;transition:150ms;border:2px solid #fff;
+}
+.redeem-btn{color:#fff;background:var(--leaf);box-shadow:0 6px 14px rgba(47,148,127,.25)}
+.continue-btn{color:var(--muted);background:rgba(255,255,255,.6);cursor:not-allowed;border-color:rgba(47,148,127,.15)}
+
+/* 存档记录 */
+.history-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;border-radius:8px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(47,148,127,.1);
+  margin-bottom:6px;font-size:13px;
+}
+.history-item .earn{color:#2f947f;font-weight:800}
+.history-item .redeem{color:#9b503e;font-weight:800}
+.history-item .undo{color:var(--muted)}
+.history-item .pts{font-weight:900;font-size:14px}
+
+/* PIN键盘 */
+.pin-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;padding:20px}
+.pin-box{background:#fff;border-radius:16px;padding:28px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.pin-box h3{margin:0 0 6px;font-size:22px;color:var(--ink)}
+.pin-box p{margin:0 0 18px;color:var(--muted);font-size:13px}
+.pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:18px}
+.pin-dot{width:34px;height:34px;border-radius:50%;border:2px solid rgba(47,148,127,.3);transition:180ms}
+.pin-dot.filled{background:var(--leaf);border-color:var(--leaf)}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:260px;margin:0 auto}
+.pin-key{min-height:52px;border-radius:10px;background:#e7f4df;color:var(--ink);font-size:22px;font-weight:800;transition:120ms;border:none}
+.pin-key:active{background:var(--leaf);color:#fff;transform:scale(.96)}
+.pin-key.del{background:#fff0e9;color:#9b503e;font-size:18px}
+.pin-key:disabled{opacity:.35;cursor:not-allowed}
+
+/* 宝贝信息弹窗 */
+.child-profile-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;padding:20px}
+.child-profile-box{background:#fff;border-radius:16px;padding:28px;max-width:400px;width:100%;box-shadow:0 22px 64px rgba(0,0,0,.18);animation:modal-in 200ms ease;position:relative}
+.child-profile-box .close-btn{position:absolute;top:12px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:#f5f5f5;color:#666;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:150ms}
+.child-profile-box .close-btn:hover{background:#e0e0e0;color:#333}
+.child-profile-box h3{margin:0 0 20px;font-size:22px;color:var(--ink)}
+.profile-field{margin-bottom:18px}
+.profile-field label{display:block;margin-bottom:8px;font-weight:800;color:var(--ink);font-size:13px}
+.profile-field input[type="text"]{width:100%;min-height:40px;padding:10px 12px;border-radius:8px;border:1px solid rgba(47,112,94,.18);font-size:15px;outline:none;box-sizing:border-box}
+.profile-field input[type="text"]:focus{border-color:var(--leaf);box-shadow:0 0 0 4px rgba(47,148,127,.12)}
+.gender-options{display:flex;gap:10px}
+.gender-option{flex:1;padding:12px;border-radius:8px;border:2px solid rgba(47,112,94,.18);background:#fff;cursor:pointer;transition:150ms;text-align:center}
+.gender-option:hover{border-color:var(--leaf)}
+.gender-option input{display:none}
+.gender-option input:checked+span{color:var(--leaf-dark);font-weight:800}
+.gender-option:has(input:checked){border-color:var(--leaf);background:#e7f4df}
+.theme-options{display:flex;gap:8px;flex-wrap:wrap}
+.theme-option{width:50px;height:50px;border-radius:8px;border:2px solid rgba(47,112,94,.18);background:#fff;cursor:pointer;transition:150ms;padding:6px}
+.theme-option:hover{border-color:var(--leaf);transform:scale(1.05)}
+.theme-option.active{border-color:var(--leaf);box-shadow:0 0 0 3px rgba(47,148,127,.3)}
+.theme-option span{display:block;width:100%;height:100%;border-radius:4px}
+.child-profile-box .primary{width:100%;margin-top:10px}
+
+/* 积分历史弹窗 */
+.history-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;padding:20px}
+.history-box{background:#fff;border-radius:16px;padding:28px;max-width:500px;width:100%;max-height:70vh;overflow-y:auto;box-shadow:0 22px 64px rgba(0,0,0,.18);animation:modal-in 200ms ease;position:relative}
+.history-box .close-btn{position:absolute;top:12px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:#f5f5f5;color:#666;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:150ms}
+.history-box .close-btn:hover{background:#e0e0e0;color:#333}
+.history-box h3{margin:0 0 20px;font-size:22px;color:var(--ink)}
+#historyPopupList{max-height:400px;overflow-y:auto}
+.history-item{padding:12px;border-bottom:1px solid rgba(47,112,94,.1);font-size:13px}
+.history-item:last-child{border-bottom:none}
+.history-item .date{color:var(--muted);font-size:12px;margin-bottom:4px}
+.history-item .desc{color:var(--ink);font-weight:700}
+.history-item .pts{color:var(--leaf-dark);font-weight:800;float:right}
+
+/* 多孩子管理 */
+.child-item{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;background:#f8f9fa;margin-bottom:8px;transition:150ms}
+.child-item:hover{background:#e9ecef}
+.child-item.active{background:#e7f4df;border:2px solid var(--leaf)}
+.child-item .child-name{font-weight:700;color:var(--ink)}
+.child-item .child-info{font-size:12px;color:var(--muted)}
+.child-item .child-actions{display:flex;gap:4px}
+.child-item button{padding:4px 8px;border-radius:4px;border:none;font-size:11px;cursor:pointer;transition:150ms}
+.child-item .switch-btn{background:var(--leaf);color:#fff}
+.child-item .switch-btn:hover{background:var(--leaf-dark)}
+.child-item .delete-btn{background:#ff6b6b;color:#fff}
+.child-item .delete-btn:hover{background:#ee5a5a}
+
+/* ======== 家长中心弹窗 ======== */
+.pin-overlay,.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;padding:20px}
+.pin-box,.modal-box{background:#fff;border-radius:16px;padding:26px;max-width:520px;width:100%;box-shadow:0 22px 64px rgba(0,0,0,.18);animation:modal-in 200ms ease}
+@keyframes modal-in{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.modal-box h3{margin:0 0 4px;font-size:22px;color:var(--ink)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.task-manage-row{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:8px;background:#fff;border:1px solid rgba(47,148,127,.12);margin-bottom:5px;flex-wrap:wrap}
+.task-manage-row input,.task-manage-row select{border:1px solid rgba(47,112,94,.18);border-radius:6px;padding:4px 6px;font-size:12px;outline:none}
+.task-manage-row input:focus,.task-manage-row select:focus{border-color:var(--leaf)}
+.task-del-btn{padding:4px 9px;border-radius:8px;border:none;background:#fff0e9;color:#9b503e;font-size:13px;cursor:pointer;flex-shrink:0;transition:120ms}
+.task-del-btn:hover{background:#ffe0d4}
+.backup-card{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:10px;background:rgba(255,255,255,.7);border:1.5px solid rgba(47,148,127,.15);margin-bottom:8px}
+.backup-card span{font-size:13px;font-weight:700}
+.backup-note{color:var(--muted);font-size:11px;margin-top:10px;line-height:1.6;padding:10px;border-radius:8px;background:#fff8d9;border:1px solid rgba(214,166,45,.22)}
+.pin-modal-input{width:100%;min-height:40px;padding:9px 12px;border-radius:8px;border:1px solid rgba(47,112,94,.22);font-size:15px;outline:none;letter-spacing:4px;text-align:center;box-sizing:border-box}
+.pin-modal-input:focus{border-color:var(--leaf);box-shadow:0 0 0 4px rgba(47,148,127,.12)}
+
+/* 打卡规则提示 */
+.makeup-hint{
+  margin-top:10px;padding:10px 14px;border-radius:8px;
+  background:#e3f4d9;border:1px solid rgba(47,148,127,.18);
+  color:var(--leaf-dark);font-size:12px;font-weight:700;
+}
+.makeup-hint .warning{color:#9b503e}
+
+/* 响应式 */
+@media(max-width:1120px){
+  .topbar{align-items:stretch;flex-direction:column}
+  .brand,.profile{min-width:0}
+  .nav{justify-content:flex-start;overflow-x:auto;padding-bottom:2px}
+  .layout,.hero{grid-template-columns:1fr}
+  .stack{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .page{width:min(100% - 24px,560px);margin-top:14px}
+  .topbar{padding:14px}
+  .profile{justify-content:space-between}
+  .stack,.tasks-grid,.insight-grid,.reward-grid,.review-grid,.works-grid{grid-template-columns:1fr}
+  .map-card{min-height:0;padding:16px}
+  .map-title{max-width:none}
+  .quest-board{grid-template-columns:1fr}
+  .quest-route{min-height:690px}
+  .quest-route::before{inset:32px 50% 44px 42px;width:0;border-width:0 0 0 12px;border-left-color:rgba(255,251,230,.95);border-radius:999px;transform:none}
+  .checkpoint{left:50% !important;width:min(100%,230px);transform:translateX(-50%)}
+  .checkpoint:nth-of-type(1){top:0 !important}
+  .checkpoint:nth-of-type(2){top:138px !important}
+  .checkpoint:nth-of-type(3){top:276px !important}
+  .checkpoint:nth-of-type(4){top:414px !important}
+  .checkpoint:nth-of-type(5){top:552px !important}
+  .checkpoint:hover,.checkpoint.active{transform:translate(-50%,-3px)}
+  .section-heading{display:block}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div><h1>暑假成长积分银行</h1><p>记录每一点努力，看见每一次成长</p></div>
+    </div>
+    <nav class="nav" aria-label="页面导航">
+      <button type="button" data-target="home" aria-selected="true">成长地图</button>
+      <button type="button" data-target="tasks" aria-selected="false">今日打卡</button>
+      <button type="button" data-target="review" aria-selected="false">每周复盘</button>
+      <button type="button" data-target="rewards" aria-selected="false">奖励兑换</button>
+      <button type="button" data-target="works" aria-selected="false">成长作品</button>
+    </nav>
+    <div class="profile">
+      <button class="profile-child-btn" type="button" id="childProfileBtn"><span id="topChildName">宝贝</span></button>
+      <div class="coin-pill" id="coinPill" aria-live="polite"><span class="coin">分</span><span id="topPoints">0</span></div>
+      <button class="profile-parent-btn" type="button" data-target="parent">家长中心</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="layout">
+      <aside class="stack" aria-label="今日概览">
+        <section class="panel panel-pad">
+          <div class="panel-head">
+            <h2 class="panel-title"><span class="small-icon">今</span>今日任务</h2>
+            <button class="ghost" type="button" data-target="tasks">全部</button>
+          </div>
+          <div class="daily-list" id="todayPreview"></div>
+        </section>
+
+        <section class="panel panel-pad">
+          <div class="panel-head">
+            <h2 class="panel-title"><span class="small-icon">🎯</span>我的暑假小目标</h2>
+          </div>
+          <div class="goals-list" id="goalsList"></div>
+        </section>
+
+        <section class="panel panel-pad balance-card">
+          <div>
+            <span class="field-label">我的成长账户</span>
+            <div class="balance-number"><span id="sidePoints">0</span><span class="coin">分</span></div>
+            <p class="muted">积分用来兑换看得见的鼓励，也用来回望坚持的脚印。</p>
+            <button class="primary" type="button" data-target="rewards">去兑换</button>
+          </div>
+          <div class="backpack" aria-hidden="true"></div>
+        </section>
+
+        <section class="panel panel-pad">
+          <label for="childName" class="field-label">孩子姓名</label>
+          <input id="childName" class="child-field" placeholder="例如：小树苗">
+          <div class="message" style="margin-top:14px">
+            <strong id="encourageTitle">今日成长存款单</strong>
+            <span id="encourageText">完成任意一项任务，就能存入新的成长能量。</span>
+          </div>
+        </section>
+
+        <section class="panel panel-pad">
+          <div class="panel-head">
+            <h2 class="panel-title"><span class="small-icon">📅</span>打卡日历</h2>
+          </div>
+          <div id="makeupCalLabel" style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:700"></div>
+          <div class="cal-row" id="makeupCal"></div>
+          <div id="makeupHint" class="makeup-hint" style="display:none"></div>
+        </section>
+      </aside>
+
+      <div class="main-grid">
+        <section class="hero section active" id="home">
+          <div class="panel map-card" aria-label="暑假成长地图">
+            <div class="map-title">
+              <h2>我的暑假成长地图</h2>
+              <p>点击一个关卡，打开今天这一类的成长任务。完成后，关卡会被点亮。</p>
+            </div>
+            <div class="quest-board">
+              <div class="quest-route" aria-label="五大成长闯关路线">
+                <button class="checkpoint" type="button" data-station="学习力" style="left:4%;top:18%">
+                  <span class="checkpoint-number">1</span>
+                  <strong>学习力</strong>
+                  <small>阅读、练字、复盘，让学习变成稳定的小习惯。</small>
+                  <span class="stars" data-stars="学习力"></span>
+                </button>
+                <button class="checkpoint" type="button" data-station="运动力" style="left:35%;top:5%">
+                  <span class="checkpoint-number">2</span>
+                  <strong>运动力</strong>
+                  <small>运动和户外，让身体先充满暑假的电量。</small>
+                  <span class="stars" data-stars="运动力"></span>
+                </button>
+                <button class="checkpoint" type="button" data-station="自控力" style="left:72%;top:22%">
+                  <span class="checkpoint-number">3</span>
+                  <strong>自控力</strong>
+                  <small>安排时间、管理屏幕，把计划握在自己手里。</small>
+                  <span class="stars" data-stars="自控力"></span>
+                </button>
+                <button class="checkpoint" type="button" data-station="探索力" style="left:20%;top:62%">
+                  <span class="checkpoint-number">4</span>
+                  <strong>探索力</strong>
+                  <small>兴趣、情绪和沟通，找到属于自己的好奇心。</small>
+                  <span class="stars" data-stars="探索力"></span>
+                </button>
+                <button class="checkpoint" type="button" data-station="实践力" style="left:62%;top:68%">
+                  <span class="checkpoint-number">5</span>
+                  <strong>实践力</strong>
+                  <small>家务、做饭、志愿服务，把成长做出来。</small>
+                  <span class="stars" data-stars="实践力"></span>
+                </button>
+              </div>
+              <div class="gate-task-panel" aria-live="polite">
+                <h3 id="gateTaskTitle">学习力任务</h3>
+                <p id="gateTaskIntro">点击左侧关卡，查看该类型今日可以打卡的任务。</p>
+                <div class="gate-task-list" id="gateTaskList"></div>
+                <div class="gate-actions">
+                  <button class="primary" type="button" id="openGateTasks">打开完整打卡页</button>
+                  <button class="ghost" type="button" id="showAllTasks">查看全部任务</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="panel panel-pad treasure-panel">
+            <div class="panel-head">
+              <h2 class="panel-title"><span class="small-icon">箱</span>奖励宝箱</h2>
+            </div>
+            <div class="chest" aria-hidden="true"><div class="lock"></div></div>
+            <div>
+              <strong id="treasureText">再存入 10 分，开启小奖励。</strong>
+              <div class="progress-track" style="margin-top:12px"><div class="progress-fill" id="treasureProgress"></div></div>
+            </div>
+            <button class="secondary" type="button" data-target="rewards">查看奖励</button>
+            <div class="mini-calendar-wrap" id="miniCalendarWrap">
+              <div class="mini-cal-header">
+                <h3 id="miniCalMonthLabel">打卡日历</h3>
+                <div class="mini-cal-nav">
+                  <button type="button" id="miniCalPrev" title="上一月">◀</button>
+                  <button type="button" id="miniCalNext" title="下一月">▶</button>
+                </div>
+              </div>
+              <div class="mini-cal-weekdays" id="miniCalWeekdays"></div>
+              <div class="mini-cal-grid" id="miniCalGrid"></div>
+            </div>
+            <div class="message">
+              <strong>家庭支持约定</strong>
+              <span>孩子提出需要，家长给出支持；每周一次小会议，让计划跟着真实状态调整。</span>
+            </div>
+          </aside>
+        </section>
+
+        <section class="panel section" id="tasks">
+          <div class="section-shell">
+            <div class="section-heading">
+              <div>
+                <h2>今日成长任务</h2>
+                <p>五大能量均衡存入，重点方向可以多加一点。</p>
+              </div>
+              <div class="review-actions">
+                <button class="secondary" type="button" id="completeSuggested">完成推荐三项</button>
+                <button class="ghost danger" type="button" id="resetToday">清空今日</button>
+              </div>
+            </div>
+            <div id="makeupTaskHint" class="makeup-hint" style="display:none;margin-bottom:14px"></div>
+            <div class="category-tabs" id="categoryTabs"></div>
+            <div class="tasks-grid" id="taskList"></div>
+          </div>
+        </section>
+
+        <section class="panel section" id="review">
+          <div class="section-shell">
+            <div class="section-heading">
+              <div>
+                <h2>每周家庭复盘</h2>
+                <p>5 到 10 分钟，看见进步，也调整下周节奏。</p>
+              </div>
+              <button class="primary" type="button" id="saveReview">保存复盘</button>
+            </div>
+            <div class="review-grid">
+              <div class="review-card"><h3>这周我最棒的一件事是</h3><textarea id="reviewBest" placeholder="写下一个值得被看见的努力"></textarea></div>
+              <div class="review-card"><h3>这周我遇到的困难是</h3><textarea id="reviewHard" placeholder="困难可以被说出来，也可以一起拆小"></textarea></div>
+              <div class="review-card"><h3>下周我想调整的是</h3><textarea id="reviewNext" placeholder="选择一个小改变"></textarea></div>
+              <div class="review-card"><h3>家长看见的进步</h3><textarea id="reviewParent" placeholder="这周我看见孩子的一个进步是"></textarea></div>
+              <div class="review-card"><h3>孩子希望的支持</h3><textarea id="reviewSupport" placeholder="我希望爸爸妈妈继续支持我的是"></textarea></div>
+              <div class="review-card"><h3>复盘记录</h3><div class="timeline" id="reviewTimeline"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel section" id="rewards">
+          <div class="section-shell">
+            <div class="section-heading">
+              <div>
+                <h2>我的奖励兑换</h2>
+                <p>奖励不是控制孩子，而是让努力被认真看见。</p>
+              </div>
+            </div>
+            <div class="reward-grid" id="rewardGrid"></div>
+            <div class="statement">
+              <div class="leaf-badge">记</div>
+              <div>积分不是为了控制孩子，而是为了让孩子看见：我的努力是有价值的。兑换前，可以让孩子说一说"这个奖励对应了我哪一段坚持"。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel section" id="works">
+          <div class="section-shell">
+            <div class="section-heading">
+              <div>
+                <h2>成长作品收集</h2>
+                <p>把画、日记、阅读分享、做饭照片、实验记录和运动记录存进暑假成长档案。</p>
+              </div>
+            </div>
+            <div class="works-grid">
+              <div class="work-card">
+                <h3>新增作品</h3>
+                <div class="work-form">
+                  <input id="workTitle" placeholder="作品名称">
+                  <select id="workType">
+                    <option>一张画</option><option>一篇日记</option><option>一本书的分享</option>
+                    <option>一次做饭照片</option><option>一个实验记录</option><option>一段运动记录</option>
+                    <option>一次旅行观察</option><option>一个手工作品</option>
+                  </select>
+                  <textarea id="workNote" placeholder="写下作品背后的故事" style="min-height:70px"></textarea>
+                  <div class="upload-box">
+                    <label for="workMedia" class="field-label">上传图片或视频</label>
+                    <input id="workMedia" type="file" accept="image/*,video/*">
+                    <small>适合上传孩子的画、做饭照片、实验视频或运动片段。</small>
+                    <div class="media-preview" id="mediaPreview"></div>
+                  </div>
+                  <button class="primary" type="button" id="saveWork">存入成长档案</button>
+                </div>
+              </div>
+              <div class="work-card work-archive-card">
+                <h3>我的暑假成长档案</h3>
+                <div class="timeline" id="workTimeline"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel section" id="parent">
+          <div class="section-shell">
+            <div class="section-heading">
+              <div>
+                <h2>家长中心</h2>
+                <p>管理孩子信息、数据备份与奖励设置。</p>
+              </div>
+            </div>
+            <div class="review-grid">
+              <div class="review-card">
+                <h3>👶 多孩子管理</h3>
+                <div id="childList" style="margin-bottom:10px"></div>
+                <div class="work-actions" style="margin-top:8px">
+                  <button class="secondary" type="button" id="addChildBtn">➕ 添加孩子</button>
+                </div>
+              </div>
+              <div class="review-card">
+                <h3>👤 当前孩子姓名</h3>
+                <input id="parentNameField" class="child-field" placeholder="例如：小树苗">
+                <button class="secondary" type="button" id="saveName" style="margin-top:10px;width:100%">保存</button>
+              </div>
+              <div class="review-card">
+                <h3>📊 完整积分历史</h3>
+                <div class="timeline" id="parentHistory" style="max-height:300px"></div>
+              </div>
+              <div class="review-card">
+                <h3>🔒 家长密码</h3>
+                <p class="muted" style="font-size:12px;margin:4px 0 8px" id="pinStatusText">当前状态：未设置</p>
+                <input id="pinField" type="password" class="child-field" placeholder="设置4-6位数字密码" maxlength="6">
+                <div class="work-actions" style="margin-top:8px">
+                  <button class="secondary" type="button" id="savePin">设置/修改密码</button>
+                  <button class="ghost danger" type="button" id="clearPin">清除密码</button>
+                </div>
+              </div>
+              <div class="review-card">
+                <h3>💾 数据管理</h3>
+                <div class="work-actions">
+                  <button class="secondary" type="button" id="openBackup">备份与恢复</button>
+                  <button class="ghost danger" type="button" id="resetData">清空数据</button>
+                </div>
+              </div>
+              <div class="review-card">
+                <h3>🏆 总积分统计</h3>
+                <div style="font-size:40px;font-weight:900;color:var(--leaf);margin:8px 0" id="totalStat">0</div>
+                <p class="muted" style="font-size:12px">积分 = 所有已完成任务的累计得分 - 已兑换消耗</p>
+              </div>
+              <div class="review-card">
+                <h3>📅 本月补卡记录</h3>
+                <div class="timeline" id="makeupHistory" style="max-height:200px"></div>
+              </div>
+              <div class="review-card">
+                <h3>📋 任务管理</h3>
+                <p class="muted" style="font-size:12px;margin:4px 0 10px">编辑、删除、新增任务（需家长密码）</p>
+                <div class="work-actions">
+                  <button class="secondary" type="button" id="openTaskMgr">打开任务管理</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel panel-pad">
+          <div class="insight-grid">
+            <div class="metric"><span class="muted">今日完成</span><b id="doneCount">0</b></div>
+            <div class="metric"><span class="muted">今日存入</span><b id="todayPoints">0</b></div>
+            <div class="metric"><span class="muted">点亮维度</span><b id="categoryCount">0/5</b></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="firework-layer" id="fireworkLayer" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- 宝贝信息弹窗 -->
+<div class="child-profile-overlay" id="childProfileOverlay" style="display:none">
+  <div class="child-profile-box">
+    <button class="close-btn" id="closeChildProfile">×</button>
+    <h3>宝贝信息</h3>
+    <div class="profile-field">
+      <label>宝贝姓名</label>
+      <input type="text" id="childNameInput" placeholder="例如：小树苗" maxlength="10">
+    </div>
+    <div class="profile-field">
+      <label>性别</label>
+      <div class="gender-options">
+        <label class="gender-option">
+          <input type="radio" name="childGender" value="boy" id="genderBoy">
+          <span>👦 男孩</span>
+        </label>
+        <label class="gender-option">
+          <input type="radio" name="childGender" value="girl" id="genderGirl">
+          <span>👧 女孩</span>
+        </label>
+      </div>
+    </div>
+    <div class="profile-field">
+      <label>配色主题</label>
+      <div class="theme-options">
+        <button type="button" class="theme-option" data-theme="green" title="清新绿">
+          <span style="background:linear-gradient(135deg,#2f947f,#16705e)"></span>
+        </button>
+        <button type="button" class="theme-option" data-theme="blue" title="海洋蓝">
+          <span style="background:linear-gradient(135deg,#4c88b8,#2d5a7b)"></span>
+        </button>
+        <button type="button" class="theme-option" data-theme="purple" title="梦幻紫">
+          <span style="background:linear-gradient(135deg,#9b59b6,#6c3483)"></span>
+        </button>
+        <button type="button" class="theme-option" data-theme="pink" title="樱花粉">
+          <span style="background:linear-gradient(135deg,#ff7eb3,#c94b7c)"></span>
+        </button>
+        <button type="button" class="theme-option" data-theme="orange" title="活力橙">
+          <span style="background:linear-gradient(135deg,#ff9a56,#ff6b35)"></span>
+        </button>
+      </div>
+    </div>
+    <button class="primary" type="button" id="saveChildProfile">保存</button>
+  </div>
+</div>
+
+<!-- 添加孩子弹窗 -->
+<div class="child-profile-overlay" id="addChildOverlay" style="display:none">
+  <div class="child-profile-box">
+    <button class="close-btn" id="closeAddChild">×</button>
+    <h3>添加新孩子</h3>
+    <div class="profile-field">
+      <label>宝贝姓名</label>
+      <input type="text" id="newChildName" placeholder="例如：小树苗" maxlength="10">
+    </div>
+    <div class="profile-field">
+      <label>性别</label>
+      <div class="gender-options">
+        <label class="gender-option">
+          <input type="radio" name="newChildGender" value="boy" id="newGenderBoy" checked>
+          <span>👦 男孩</span>
+        </label>
+        <label class="gender-option">
+          <input type="radio" name="newChildGender" value="girl" id="newGenderGirl">
+          <span>👧 女孩</span>
+        </label>
+      </div>
+    </div>
+    <button class="primary" type="button" id="confirmAddChild">添加</button>
+  </div>
+</div>
+
+<!-- 积分历史弹窗 -->
+<div class="history-overlay" id="historyOverlay" style="display:none">
+  <div class="history-box">
+    <button class="close-btn" id="closeHistory">×</button>
+    <h3>积分历史</h3>
+    <div id="historyPopupList"></div>
+  </div>
+</div>
+
+<script>
+/* ======== CONFIG ======== */
+const CATEGORIES=["学习力","运动力","自控力","探索力","实践力"];
+const CAT_ICONS={"学习力":"📚","运动力":"⚽","自控力":"⏰","探索力":"🔍","实践力":"🍳"};
+const TASKS=[
+  {id:"study-task",title:"完成今日学习任务",pts:1,cat:"学习力"},
+  {id:"read-20",title:"阅读20分钟",pts:1,cat:"学习力"},
+  {id:"diary",title:"写日记",pts:2,cat:"学习力"},
+  {id:"handwriting",title:"练字20分钟",pts:1,cat:"学习力"},
+  {id:"poem",title:"背诵一首古诗",pts:1,cat:"学习力"},
+  {id:"words",title:"背诵10个英语单词",pts:1,cat:"学习力"},
+  {id:"mistakes",title:"错题订正复盘",pts:2,cat:"学习力"},
+  {id:"math-practice",title:"口算/计算练习15分钟",pts:1,cat:"学习力"},
+  {id:"library-book",title:"去图书馆借书一次",pts:2,cat:"学习力"},
+  {id:"sport-30",title:"运动30分钟",pts:1,cat:"运动力"},
+  {id:"outside-2h",title:"户外活动2小时",pts:2,cat:"运动力"},
+  {id:"jump-rope",title:"跳绳100个",pts:1,cat:"运动力"},
+  {id:"swim",title:"游泳/戏水30分钟",pts:2,cat:"运动力"},
+  {id:"cycling",title:"骑行20分钟",pts:1,cat:"运动力"},
+  {id:"ball-game",title:"球类运动（篮球/足球/羽毛球等）",pts:2,cat:"运动力"},
+  {id:"stretch",title:"拉伸放松10分钟",pts:1,cat:"运动力"},
+  {id:"sit-up",title:"仰卧起坐30个",pts:1,cat:"运动力"},
+  {id:"screen",title:"屏幕时间不超过2小时",pts:2,cat:"自控力"},
+  {id:"pack",title:"自己准备出行物品",pts:1,cat:"自控力"},
+  {id:"weekly-review",title:"每周复盘",pts:2,cat:"自控力"},
+  {id:"homework-time",title:"自己安排作业时间",pts:1,cat:"自控力"},
+  {id:"initiative",title:"主动安排并完成一件事",pts:3,cat:"自控力"},
+  {id:"early-sleep",title:"早睡（9点30分前）",pts:1,cat:"自控力"},
+  {id:"alarm",title:"自己定闹钟并按时起床",pts:1,cat:"自控力"},
+  {id:"organize-bag",title:"整理书包/文具",pts:1,cat:"自控力"},
+  {id:"less-snack",title:"减少零食摄入",pts:1,cat:"自控力"},
+  {id:"look-far",title:"望远2次，每次20秒",pts:1,cat:"自控力"},
+  {id:"interest-work",title:"完成一件兴趣作品",pts:2,cat:"探索力"},
+  {id:"explore",title:"参加一次探索活动",pts:2,cat:"探索力"},
+  {id:"emotion",title:"情绪好好表达",pts:1,cat:"探索力"},
+  {id:"talk",title:"亲子沟通一次",pts:1,cat:"探索力"},
+  {id:"observe-nature",title:"观察自然（植物/昆虫/天气）",pts:1,cat:"探索力"},
+  {id:"mini-experiment",title:"做一个小实验",pts:2,cat:"探索力"},
+  {id:"learn-song",title:"学唱一首新歌",pts:1,cat:"探索力"},
+  {id:"visit-museum",title:"参观博物馆/展览",pts:3,cat:"探索力"},
+  {id:"observation-diary",title:"写一篇观察日记",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handicraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"handcraft",title:"做一个小手工",pts:2,cat:"探索力"},
+  {id:"chore",title:"帮父母做一次家务",pts:2,cat:"实践力"},
+  {id:"room",title:"整理自己房间",pts:1,cat:"实践力"},
+  {id:"cook",title:"做一道菜",pts:3,cat:"实践力"},
+  {id:"volunteer",title:"做一次志愿者",pts:2,cat:"实践力"},
+  {id:"party",title:"组织一场朋友聚会",pts:2,cat:"实践力"},
+  {id:"wash-dishes",title:"洗碗",pts:1,cat:"实践力"},
+  {id:"water-plants",title:"浇花/照顾植物",pts:1,cat:"实践力"},
+  {id:"pet-care",title:"照顾宠物（喂食/遛弯）",pts:1,cat:"实践力"},
+  {id:"grocery",title:"帮家长买菜/购物",pts:2,cat:"实践力"},
+  {id:"trash-sort",title:"垃圾分类",pts:1,cat:"实践力"}
+];
+const REWARDS=[
+  {cost:10,title:"10分小奖励",items:["选择一次家庭电影","点播一次睡前故事","选择一次晚餐菜单","多一次亲子游戏时间"]},
+  {cost:30,title:"30分中奖励",items:["买一本喜欢的书","一次朋友聚会","一次亲子外出","一个手工或科学材料包"]},
+  {cost:60,title:"60分大奖励",items:["一次短途旅行","一次主题体验活动","实现一个孩子期待的小愿望"]}
+];
+const CAT_INTRO={
+  "学习力":"把学习拆成看得见的小动作，今天从一项开始也很好。",
+  "运动力":"身体动起来，暑假的能量才会越来越满。",
+  "自控力":"把屏幕、时间和计划交还给孩子练习掌舵。",
+  "探索力":"保留好奇、表达感受，也记录一次新的尝试。",
+  "实践力":"在真实生活里做一件事，成长会更有手感。"
+};
+
+/* ======== HELPERS ======== */
+function localDateStr(d){const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const day=String(d.getDate()).padStart(2,'0');return`${y}-${m}-${day}`;}
+const TODAY=new Date();
+const TODAY_STR=localDateStr(TODAY);
+function fmtDisplay(d){
+  const m=d.getMonth()+1;const day=d.getDate();
+  const wd=["日","一","二","三","四","五","六"][d.getDay()];
+  return`${m}月${day}日（周${wd}）`;
+}
+function fmtDate(ds){return localDateStr(new Date(ds+"T00:00:00"));}
+function esc(s){return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
+function getMonthKey(ds){return ds.slice(0,7);}
+function isFuture(ds){return ds>TODAY_STR;}
+function isToday(ds){return ds===TODAY_STR;}
+function isSameMonth(ds){return getMonthKey(ds)===getMonthKey(TODAY_STR);}
+
+/* ======== 补卡规则 ======== */
+function getMakeupUsed(mk){return(data.makeupUsed||{})[mk]||0;}
+function getMakeupCost(ds){
+  if(isToday(ds))return{allowed:true,cost:0,reason:"今天"};
+  if(isFuture(ds))return{allowed:false,cost:0,reason:"未来日期"};
+  if(!isSameMonth(ds))return{allowed:false,cost:0,reason:"只能补当月"};
+  const mk=getMonthKey(ds);
+  const used=getMakeupUsed(mk);
+  if(used>=4)return{allowed:false,cost:0,reason:"本月补卡次数已用完(4次)"};
+  if(used<2)return{allowed:true,cost:0,reason:"免费补卡(本月已用"+used+"次)"};
+  if(used===2)return{allowed:true,cost:10,reason:"第3次补卡需扣10分"};
+  if(used===3)return{allowed:true,cost:20,reason:"第4次补卡需扣20分"};
+  return{allowed:false,cost:0,reason:"不可补卡"};
+}
+function canCheckIn(ds){
+  if(isToday(ds))return true;
+  return getMakeupCost(ds).allowed;
+}
+function isPastLocked(ds){
+  if(isFuture(ds))return false;
+  if(isToday(ds))return false;
+  return !canCheckIn(ds);
+}
+
+/* ======== MEDIA STORAGE (IndexedDB) ======== */
+function openDB(){return new Promise((rs,rj)=>{const r=indexedDB.open("SummerGrowthBank",1);r.onupgradeneeded=e=>{if(!e.target.result.objectStoreNames.contains("media"))e.target.result.createObjectStore("media",{keyPath:"id"});};r.onsuccess=e=>rs(e.target.result);r.onerror=e=>rj(e.target.error);});}
+async function saveMedia(id,dataUrl){const db=await openDB();return new Promise((rs,rj)=>{const tx=db.transaction("media","readwrite");tx.objectStore("media").put({id,dataUrl});tx.oncomplete=rs;tx.onerror=rj;});}
+async function getMedia(id){try{const db=await openDB();return new Promise((rs,rj)=>{const tx=db.transaction("media","readonly");const r=tx.objectStore("media").get(id);r.onsuccess=()=>rs(r.result?r.result.dataUrl:null);r.onerror=rj;});}catch{return null;}}
+
+/* ======== PASSWORD ======== */
+async function hashPin(p){
+  if(!p||p.length<4||p.length>6||!/^\d+$/.test(p))return null;
+  const buf=new TextEncoder().encode(p);
+  const h=await crypto.subtle.digest("SHA-256",buf);
+  return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+async function verifyPin(pin){
+  if(!data.parentPinHash)return true;
+  const h=await hashPin(pin);
+  return h===data.parentPinHash;
+}
+
+/* ======== STATE ======== */
+function freshState(){return{
+  childName:"",points:0,
+  completedByDate:{},// {dateStr:[taskId,...]}
+  history:[],
+  reviews:[],
+  works:[],
+  customRewards:{},
+  makeupUsed:{},// {"2026-07":3}
+  makeupHistory:[],
+  parentPinHash:"",
+  customTasks:null,
+  modifiedDefaultTasks:null,
+  goals:{},// {studyChecked:true,studyText:"",sportChecked:false,...}
+  childGender:"boy",
+  childTheme:"green",
+  currentChildId:"default",// 当前孩子ID
+  children:{}// 所有孩子数据 {"childId":{childName,childGender,childTheme,points,...}}
+};}
+function loadState(){
+  try{
+    const s=JSON.parse(localStorage.getItem("summerGrowthBankV3")||"{}");
+    return{...freshState(),...s,
+      completedByDate:s.completedByDate||{},
+      customRewards:s.customRewards||{},
+      makeupUsed:s.makeupUsed||{},
+      history:s.history||[],
+      reviews:s.reviews||[],
+      works:s.works||[],
+      parentPinHash:s.parentPinHash||""
+    };
+  }catch{return freshState();}
+}
+function saveState(){
+  try{
+    localStorage.setItem("summerGrowthBankV3",JSON.stringify(data));
+    return true;
+  }catch{
+    showToast("存储空间不足，请清理旧数据");
+    return false;
+  }
+}
+let data=loadState();
+let selectedCategory="全部";
+let activeMapCategory="学习力";
+let selectedWorkMedia=null;
+let audioCtx=null;
+
+/* ======== AUDIO ======== */
+function playCoinSound(){
+  try{
+    audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();
+    const now=audioCtx.currentTime;
+    [880,1320,1760].forEach((f,i)=>{
+      const o=audioCtx.createOscillator();
+      const g=audioCtx.createGain();
+      o.type="triangle";o.frequency.setValueAtTime(f,now+i*.06);
+      g.gain.setValueAtTime(.0001,now+i*.06);
+      g.gain.exponentialRampToValueAtTime(.22,now+i*.06+.015);
+      g.gain.exponentialRampToValueAtTime(.0001,now+i*.06+.16);
+      o.connect(g);g.connect(audioCtx.destination);
+      o.start(now+i*.06);o.stop(now+i*.06+.18);
+    });
+  }catch{}
+}
+
+/* ======== EFFECTS ======== */
+function launchFireworks(ev){
+  const layer=document.getElementById("fireworkLayer");
+  const rect=ev&&ev.target?ev.target.getBoundingClientRect():null;
+  const x=rect?rect.left+rect.width/2:window.innerWidth/2;
+  const y=rect?rect.top+rect.height/2:window.innerHeight*.42;
+  const colors=["#e7ac2c","#2f947f","#ef8f72","#4c88b8","#fff1a8"];
+  for(let i=0;i<26;i++){
+    const sp=document.createElement("span");
+    const a=Math.PI*2*i/26;
+    const d=48+Math.random()*82;
+    sp.className="spark";
+    sp.style.setProperty("--x",x+"px");sp.style.setProperty("--y",y+"px");
+    sp.style.setProperty("--dx",Math.cos(a)*d+"px");sp.style.setProperty("--dy",Math.sin(a)*d+"px");
+    sp.style.setProperty("--spark-color",colors[i%colors.length]);
+    layer.appendChild(sp);
+    setTimeout(()=>sp.remove(),850);
+  }
+}
+function celebrate(ev){
+  playCoinSound();
+  launchFireworks(ev);
+}
+
+/* ======== CORE LOGIC ======== */
+function todayCompleted(){
+  return data.completedByDate[TODAY_STR]||[];
+}
+function getCompleted(ds){
+  return data.completedByDate[ds]||[];
+}
+function calcTotalPoints(){
+  return Math.max(0,data.points);
+}
+function getRewardItems(cost){
+  const r=REWARDS.find(x=>x.cost===cost);
+  return(data.customRewards&&data.customRewards[cost]&&data.customRewards[cost].length)
+    ?data.customRewards[cost]:(r?r.items:[]);
+}
+
+function toggleTask(taskId,checked,ev,dateStr){
+  const t=getActiveTasks().find(x=>x.id===taskId);
+  if(!t)return;
+  const ds=dateStr||TODAY_STR;
+  const completed=getCompleted(ds);
+  const done=new Set(completed);
+
+  if(checked&&!done.has(taskId)){
+    // 补卡扣分
+    if(!isToday(ds)){
+      const mc=getMakeupCost(ds);
+      if(!mc.allowed)return;
+      if(mc.cost>0){
+        const dayCompleted=getCompleted(ds);
+        const alreadyDoneAny=dayCompleted.some(id=>done.has(id)&&id!==taskId);
+        if(!alreadyDoneAny){
+          const mk=getMonthKey(ds);
+          data.makeupUsed[mk]=(data.makeupUsed[mk]||0)+1;
+          data.points=Math.max(0,data.points-mc.cost);
+          data.history.unshift({type:"undo",date:new Date().toLocaleString("zh-CN"),text:"补卡扣分("+mc.reason+")",points:-mc.cost});
+          data.makeupHistory.unshift({date:ds,cost:mc.cost,reason:mc.reason});
+        }
+      }else{
+        const mk=getMonthKey(ds);
+        const dayCompleted=getCompleted(ds);
+        const alreadyDoneAny=dayCompleted.some(id=>done.has(id)&&id!==taskId);
+        if(!alreadyDoneAny){
+          data.makeupUsed[mk]=(data.makeupUsed[mk]||0)+1;
+        }
+      }
+    }
+
+    done.add(taskId);
+    data.points+=t.pts;
+    data.history.unshift({type:"earn",date:new Date().toLocaleString("zh-CN"),text:`完成「${t.title}」`,points:t.pts});
+    celebrate(ev);
+    showToast("太棒了！你又为自己的暑假成长存入了一点能量。");
+  }else if(!checked&&done.has(taskId)){
+    done.delete(taskId);
+    data.points=Math.max(0,data.points-t.pts);
+    data.history.unshift({type:"undo",date:new Date().toLocaleString("zh-CN"),text:`取消「${t.title}」`,points:-t.pts});
+    showToast("已调整记录，成长计划可以灵活修正。");
+  }
+
+  data.completedByDate[ds]=[...done];
+  saveState();
+  renderAll();
+}
+
+function getActiveTasks(){
+  if(data.modifiedDefaultTasks&&Array.isArray(data.modifiedDefaultTasks)){
+    return[...data.modifiedDefaultTasks,...(data.customTasks||[])];
+  }
+  return[...TASKS,...(data.customTasks||[])];
+}
+
+/* ======== TOAST ======== */
+function showToast(txt){
+  const t=document.getElementById("toast");
+  t.textContent=txt;t.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t=setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+/* ======== NAVIGATION ======== */
+function switchSection(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));
+  document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.target===id)));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("[data-target]").forEach(b=>b.addEventListener("click",()=>switchSection(b.dataset.target)));
+
+/* ======== RENDER ======== */
+function renderAll(){
+  renderChildName();
+  renderMetrics();
+  renderTabs();
+  renderTasks();
+  renderGateTasks();
+  renderPreview();
+  renderGoals();
+  renderRewards();
+  renderReviews();
+  renderWorks();
+  renderMakeupCal();
+  renderMakeupHint();
+  renderMiniCalendar();
+  renderParent();
+}
+
+function renderChildName(){
+  document.getElementById("childName").value=data.childName||"";
+  document.getElementById("parentNameField").value=data.childName||"";
+  document.getElementById("topChildName").textContent=data.childName||"宝贝";
+}
+function renderMetrics(){
+  const doneIds=todayCompleted();
+  const todayScore=getActiveTasks().filter(t=>doneIds.includes(t.id)).reduce((s,t)=>s+t.pts,0);
+  const litCats=CATEGORIES.filter(c=>getActiveTasks().some(t=>t.cat===c&&doneIds.includes(t.id)));
+  document.getElementById("topPoints").textContent=calcTotalPoints();
+  document.getElementById("sidePoints").textContent=calcTotalPoints();
+  document.getElementById("doneCount").textContent=doneIds.length;
+  document.getElementById("todayPoints").textContent=todayScore;
+  document.getElementById("categoryCount").textContent=`${litCats.length}/5`;
+  document.getElementById("totalStat").textContent=calcTotalPoints();
+
+  const nextR=REWARDS.find(r=>r.cost>calcTotalPoints())||REWARDS[REWARDS.length-1];
+  const pct=Math.min(100,Math.round((calcTotalPoints()/nextR.cost)*100));
+  document.getElementById("treasureProgress").style.width=pct+"%";
+  document.getElementById("treasureText").textContent=calcTotalPoints()>=60?"大奖励宝箱已经可以开启。":`再存入 ${nextR.cost-calcTotalPoints()} 分，开启${nextR.title.replace(/^[0-9]+分/,"")}。`;
+  document.getElementById("encourageTitle").textContent=doneIds.length?"今日成长存款成功":"今日成长存款单";
+  document.getElementById("encourageText").textContent=doneIds.length?`今天已完成 ${doneIds.length} 项，存入 ${todayScore} 分。继续保持小步前进。`:"完成任意一项任务，就能存入新的成长能量。";
+
+  CATEGORIES.forEach(cat=>{
+    const catTasks=getActiveTasks().filter(t=>t.cat===cat);
+    const count=catTasks.filter(t=>doneIds.includes(t.id)).length;
+    const total=Math.max(1,catTasks.length);
+    const stars=Math.min(3,Math.ceil((count/total)*3));
+    const el=document.querySelector(`[data-stars="${cat}"]`);
+    if(el)el.innerHTML="★".repeat(stars)+`<span class="star-empty">${"★".repeat(3-stars)}</span>`;
+    const btn=document.querySelector(`[data-station="${cat}"]`);
+    if(btn)btn.classList.toggle("done",count>0);
+  });
+}
+
+function renderTabs(){
+  const tabs=document.getElementById("categoryTabs");
+  const names=["全部",...CATEGORIES];
+  tabs.innerHTML=names.map(n=>`<button type="button" class="${selectedCategory===n?"active":""}" data-category="${n}">${n}</button>`).join("");
+  tabs.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{selectedCategory=b.dataset.category;renderTabs();renderTasks();}));
+}
+
+function renderTasks(){
+  const list=document.getElementById("taskList");
+  const allTasks=getActiveTasks();
+  const vis=allTasks.filter(t=>selectedCategory==="全部"||t.cat===selectedCategory);
+  list.innerHTML=vis.map(t=>{
+    const checked=todayCompleted().includes(t.id);
+    return`<label class="task-row ${checked?"done":""}">
+      <input type="checkbox" data-task="${t.id}" ${checked?"checked":""}>
+      <span><strong>${esc(t.title)}</strong><span class="tag">${CAT_ICONS[t.cat]||""} ${esc(t.cat)}</span></span>
+      <span class="point"><span class="coin">分</span>+${t.pts}</span>
+    </label>`;
+  }).join("");
+  list.querySelectorAll("input[type=checkbox]").forEach(inp=>{
+    inp.addEventListener("change",ev=>toggleTask(inp.dataset.task,inp.checked,ev,TODAY_STR));
+  });
+}
+
+function renderGateTasks(){
+  const done=todayCompleted();
+  const catTasks=getActiveTasks().filter(t=>t.cat===activeMapCategory);
+  document.getElementById("gateTaskTitle").textContent=`${activeMapCategory}任务`;
+  document.getElementById("gateTaskIntro").textContent=CAT_INTRO[activeMapCategory]||"";
+  document.querySelectorAll(".checkpoint").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.station===activeMapCategory);
+    btn.setAttribute("aria-pressed",String(btn.dataset.station===activeMapCategory));
+  });
+  document.getElementById("gateTaskList").innerHTML=catTasks.map(t=>{
+    const checked=done.includes(t.id);
+    return`<label class="gate-task">
+      <input type="checkbox" data-gate-task="${t.id}" ${checked?"checked":""}>
+      <span>${esc(t.title)}</span>
+      <span class="point">+${t.pts}</span>
+    </label>`;
+  }).join("");
+  document.querySelectorAll("#gateTaskList input").forEach(inp=>{
+    inp.addEventListener("change",ev=>toggleTask(inp.dataset.gate,inp.checked,ev,TODAY_STR));
+  });
+}
+
+function renderPreview(){
+  const preferred=["read-20","sport-30","screen"];
+  const done=todayCompleted();
+  document.getElementById("todayPreview").innerHTML=preferred.map(id=>{
+    const t=getActiveTasks().find(item=>item.id===id);
+    if(!t)return"";
+    const checked=done.includes(id);
+    return`<label class="mini-task">
+      <input type="checkbox" data-task="${id}" ${checked?"checked":""}>
+      <span><strong>${esc(t.title)}</strong><span>${checked?"已完成":t.cat}</span></span>
+      <span class="point">+${t.pts}</span>
+    </label>`;
+  }).join("");
+  document.querySelectorAll("#todayPreview input").forEach(inp=>{
+    inp.addEventListener("change",ev=>toggleTask(inp.dataset.task,inp.checked,ev,TODAY_STR));
+  });
+}
+
+function renderGoals(){
+  const list=document.getElementById("goalsList");
+  const goals=data.goals||{};
+  const goalConfigs=[
+    {key:"study",label:"学习力目标",icon:"📚"},
+    {key:"sport",label:"运动力目标",icon:"⚽"},
+    {key:"selfcontrol",label:"自控力目标",icon:"⏰"},
+    {key:"explore",label:"探索力目标",icon:"🔍"},
+    {key:"practice",label:"实践力目标",icon:"🍳"},
+    {key:"other",label:"其他目标",icon:"⭐"}
+  ];
+  list.innerHTML=goalConfigs.map(cfg=>{
+    const checked=goals[cfg.key+"Checked"]||false;
+    const text=goals[cfg.key+"Text"]||"";
+    return`<div class="goal-item">
+      <input type="checkbox" id="goal_${cfg.key}" data-goal="${cfg.key}" ${checked?"checked":""}>
+      <div style="display:flex;align-items:center;gap:8px;flex:1">
+        <label class="goal-label" for="goal_${cfg.key}">${cfg.label}</label>
+        <input type="text" class="goal-input" data-goal-text="${cfg.key}" value="${esc(text)}" placeholder="填写具体目标...">
+      </div>
+    </div>`;
+  }).join("");
+  list.querySelectorAll("input[type=checkbox]").forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      const key=cb.dataset.goal;
+      if(!data.goals)data.goals={};
+      data.goals[key+"Checked"]=cb.checked;
+      saveState();
+    });
+  });
+  list.querySelectorAll(".goal-input").forEach(inp=>{
+    inp.addEventListener("input",()=>{
+      const key=inp.dataset.goalText;
+      if(!data.goals)data.goals={};
+      data.goals[key+"Text"]=inp.value;
+      saveState();
+    });
+  });
+}
+
+function renderRewards(){
+  const grid=document.getElementById("rewardGrid");
+  grid.innerHTML=REWARDS.map(r=>{
+    const can=calcTotalPoints()>=r.cost;
+    const items=getRewardItems(r.cost);
+    return`<article class="reward-card">
+      <div class="reward-level">
+        <h3>${esc(r.title)}</h3>
+        <span class="coin-pill"><span class="coin">分</span>${r.cost}</span>
+      </div>
+      <div class="reward-items">
+        ${items.map((it,i)=>`<label class="reward-item-row" for="ri_${r.cost}_${i}">
+          <input type="radio" name="ri_${r.cost}" id="ri_${r.cost}_${i}" value="${esc(it)}" ${!can?"disabled":""}>
+          <span>${esc(it)}</span>
+        </label>`).join("")}
+      </div>
+      <details class="reward-editor">
+        <summary>修改奖励内容</summary>
+        <div class="reward-editor-body">
+          <label>家长自定义奖励内容（每行一条）</label>
+          <textarea data-red-edit="${r.cost}" placeholder="每行写一个奖励">${esc(items.join("\n"))}</textarea>
+          <button class="secondary" type="button" data-save-red="${r.cost}">保存奖励设置</button>
+        </div>
+      </details>
+      <button class="${can?"redeem-btn":"continue-btn"}" data-redeem="${r.cost}" ${can?"":"disabled"}>${can?"兑换奖励":"继续存分"}</button>
+    </article>`;
+  }).join("");
+
+  grid.querySelectorAll("input[type=radio]").forEach(inp=>{
+    inp.addEventListener("change",()=>{
+      const cost=inp.name.replace("ri_","");
+      grid.querySelectorAll(`[id^=ri_${cost}_]`).forEach(r=>r.closest(".reward-item-row").classList.remove("selected"));
+      if(inp.checked)inp.closest(".reward-item-row").classList.add("selected");
+    });
+  });
+
+  grid.querySelectorAll("[data-save-red]").forEach(b=>b.addEventListener("click",()=>{
+    const c=b.dataset.saveRed;
+    const ta=grid.querySelector(`[data-red-edit="${c}"]`);
+    const items=ta.value.split("\n").map(s=>s.trim()).filter(Boolean);
+    if(!items.length){showToast("请至少写一条奖励内容");return;}
+    data.customRewards[c]=items;saveState();showToast(`${c}分奖励已保存`);renderAll();
+  }));
+
+  grid.querySelectorAll("[data-redeem]").forEach(b=>b.addEventListener("click",()=>{
+    const cost=Number(b.dataset.redeem);
+    if(calcTotalPoints()<cost)return;
+    const checked=grid.querySelector(`input[name="ri_${cost}"]:checked`);
+    if(!checked){showToast("请先选择一项具体奖励再兑换");return;}
+    const reward=REWARDS.find(x=>x.cost===cost);
+    data.points=Math.max(0,data.points-cost);
+    data.history.unshift({type:"redeem",date:new Date().toLocaleString("zh-CN"),text:`兑换「${checked.value}」`,points:-cost});
+    saveState();
+    showToast("奖励已兑换，请和孩子一起记录这段努力。");
+    renderAll();
+  }));
+}
+
+function renderReviews(){
+  const tl=document.getElementById("reviewTimeline");
+  if(!data.reviews.length){tl.innerHTML=`<div class="empty">还没有复盘记录。</div>`;return;}
+  tl.innerHTML=data.reviews.slice(0,8).map(r=>`<div class="timeline-item">
+    <time>${esc(r.date)}</time><strong>${esc(r.best||"本周复盘")}</strong>
+    <span class="muted">${esc(r.next||"下周继续小步调整")}</span>
+  </div>`).join("");
+}
+
+document.getElementById("saveReview").addEventListener("click",()=>{
+  const review={
+    date:new Date().toLocaleDateString("zh-CN"),
+    best:document.getElementById("reviewBest").value.trim(),
+    hard:document.getElementById("reviewHard").value.trim(),
+    next:document.getElementById("reviewNext").value.trim(),
+    parent:document.getElementById("reviewParent").value.trim(),
+    support:document.getElementById("reviewSupport").value.trim()
+  };
+  if(!review.best&&!review.hard&&!review.next){showToast("请至少填写一项复盘内容");return;}
+  data.reviews.unshift(review);saveState();
+  ["reviewBest","reviewHard","reviewNext","reviewParent","reviewSupport"].forEach(id=>document.getElementById(id).value="");
+  showToast("复盘已保存，看见进步就是最好的成长。");
+  renderAll();
+});
+
+function renderWorks(){
+  const tl=document.getElementById("workTimeline");
+  if(!data.works.length){tl.innerHTML=`<div class="empty">还没有作品。暑假结束后，这里会成为孩子自己的成长档案。</div>`;return;}
+  tl.innerHTML=data.works.slice(0,20).map(w=>`<div class="timeline-item">
+    <time>${esc(w.date)} · ${esc(w.type||"")}</time>
+    <strong>${esc(w.title||"成长作品")}</strong>
+    <span class="muted">${esc(w.note||"这是一份值得收藏的成长作品。")}</span>
+    ${w.mediaKind==="image"&&w.mediaDataUrl?`<div class="work-media"><img src="${w.mediaDataUrl}" alt="${esc(w.title)}"></div>`:""}
+    ${w.mediaKind==="video"&&w.mediaDataUrl?`<div class="work-media"><video src="${w.mediaDataUrl}" controls playsinline></video></div>`:""}
+    ${w.mediaKind==="audio"&&w.mediaDataUrl?`<div class="work-media"><audio src="${w.mediaDataUrl}" controls></audio></div>`:""}
+  </div>`).join("");
+}
+
+document.getElementById("workMedia").addEventListener("change",e=>{
+  const f=e.target.files[0];if(!f)return;
+  selectedWorkMedia=f;
+  const p=document.getElementById("mediaPreview");
+  const url=URL.createObjectURL(f);
+  if(f.type.startsWith("image/"))p.innerHTML=`<img src="${url}" alt="预览">`;
+  else if(f.type.startsWith("video/"))p.innerHTML=`<video src="${url}" controls playsinline></video>`;
+  else if(f.type.startsWith("audio/"))p.innerHTML=`<audio src="${url}" controls style="width:100%"></audio>`;
+  else p.innerHTML=`<span class="file-chip">已选择：${esc(f.name)}</span>`;
+  p.classList.add("show");
+});
+
+document.getElementById("saveWork").addEventListener("click",async()=>{
+  const title=document.getElementById("workTitle").value.trim();
+  const type=document.getElementById("workType").value;
+  const note=document.getElementById("workNote").value.trim();
+  if(!selectedWorkMedia&&!title&&!note){showToast("请至少添加一个作品信息");return;}
+  const work={date:new Date().toLocaleDateString("zh-CN"),title,type,note,mediaKind:null,mediaDataUrl:null};
+  if(selectedWorkMedia){
+    if(selectedWorkMedia.type.startsWith("image/"))work.mediaKind="image";
+    else if(selectedWorkMedia.type.startsWith("video/"))work.mediaKind="video";
+    else if(selectedWorkMedia.type.startsWith("audio/"))work.mediaKind="audio";
+    const reader=new FileReader();
+    reader.onload=()=>{
+      work.mediaDataUrl=reader.result;
+      data.works.unshift(work);saveState();
+      selectedWorkMedia=null;document.getElementById("workMedia").value="";
+      document.getElementById("mediaPreview").classList.remove("show");
+      document.getElementById("mediaPreview").innerHTML="";
+      document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
+      showToast("作品已存入成长档案 🎨");renderAll();
+    };
+    reader.readAsDataURL(selectedWorkMedia);
+  }else{
+    data.works.unshift(work);saveState();
+    document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
+    showToast("作品已存入成长档案 🎨");renderAll();
+  }
+});
+
+function renderHistory(){
+  const list=document.getElementById("historyList");
+  if(!data.history.length){list.innerHTML=`<div class="empty" style="font-size:12px">还没有积分记录。</div>`;return;}
+  list.innerHTML=data.history.slice(0,10).map(h=>`<div class="history-item">
+    <span class="${h.type==="earn"?"earn":h.type==="redeem"?"redeem":"undo"}">${esc(h.text)}</span>
+    <span class="pts">${h.points>0?"+":""}${h.points}</span>
+  </div>`).join("");
+}
+
+/* 打卡日历（补卡用）*/
+function renderMakeupCal(){
+  const cal=document.getElementById("makeupCal");
+  const label=document.getElementById("makeupCalLabel");
+  const mk=getMonthKey(TODAY_STR);
+  const used=getMakeupUsed(mk);
+  label.textContent=`${TODAY.getMonth()+1}月补卡：已用 ${used}/4 次`;
+
+  const daysInMonth=new Date(TODAY.getFullYear(),TODAY.getMonth()+1,0).getDate();
+  let html="";
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${TODAY.getFullYear()}-${String(TODAY.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const done=getCompleted(ds).length>0;
+    const isT=isToday(ds);
+    const locked=isPastLocked(ds);
+    const future=isFuture(ds);
+    html+=`<div class="cal-cell ${done?"has":""} ${isT?"today":""} ${locked?"locked":""}" data-date="${ds}" title="${ds}">
+      <div>${d}</div>
+      ${done?'<div class="cal-cell-label">✓</div>':locked?'<div class="cal-cell-label">×</div>':isT?'<div class="cal-cell-label">今</div>':future?'':'<div class="cal-cell-label">补</div>'}
+    </div>`;
+  }
+  cal.innerHTML=html;
+  cal.querySelectorAll(".cal-cell:not(.locked):not(.future)").forEach(c=>{
+    c.addEventListener("click",()=>{
+      const ds=c.dataset.date;
+      const mc=getMakeupCost(ds);
+      if(!mc.allowed){showToast(mc.reason||"该日期不可打卡");return;}
+      if(isToday(ds)){switchSection("tasks");renderAll();return;}
+      showMakeupDialog(ds);
+    });
+  });
+}
+
+function showMakeupDialog(ds){
+  const mc=getMakeupCost(ds);
+  const tasks=getActiveTasks().filter(t=>true);
+  const d=new Date(ds+"T00:00:00");
+  const ov=document.createElement("div");ov.className="pin-overlay";
+  ov.innerHTML=`<div class="pin-box" style="max-width:480px;text-align:left">
+    <h3 style="text-align:center">📅 ${fmtDisplay(d)} 补卡</h3>
+    ${mc.cost>0?`<p style="color:#9b503e;text-align:center;font-weight:700">⚠ ${mc.reason}，将扣除 ${mc.cost} 分</p>`:`<p style="text-align:center">${mc.reason}（免费补卡）</p>`}
+    <div style="margin:14px 0;font-size:13px;color:var(--muted)">选择要补卡的任务（可选）：</div>
+    <div style="display:grid;gap:8px;max-height:300px;overflow:auto" id="makeupTaskList"></div>
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="ghost" style="flex:1" id="makeupCancel">取消</button>
+      <button class="primary" style="flex:1" id="makeupOk">确认补卡</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+
+  const taskList=ov.querySelector("#makeupTaskList");
+  taskList.innerHTML=tasks.map(t=>`<label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:#fff;border:1px solid rgba(47,148,127,.1);cursor:pointer">
+    <input type="checkbox" data-makeup-task="${t.id}">
+    <span style="flex:1;font-size:13px">${esc(t.title)}</span>
+    <span class="point" style="font-size:12px">+${t.pts}</span>
+  </label>`).join("");
+
+  ov.querySelector("#makeupCancel").addEventListener("click",()=>ov.remove());
+  ov.querySelector("#makeupOk").addEventListener("click",()=>{
+    const checked=[...taskList.querySelectorAll("input:checked")].map(x=>x.dataset.makeupTask);
+    const mk=getMonthKey(ds);
+    const dayDone=getCompleted(ds);
+    const alreadyAny=dayDone.some(id=>checked.includes(id));
+    if(!alreadyAny&&checked.length>0){
+      // 记录补卡
+      if(mc.cost>0){
+        data.makeupUsed[mk]=(data.makeupUsed[mk]||0)+1;
+        data.points=Math.max(0,data.points-mc.cost);
+        data.history.unshift({type:"undo",date:new Date().toLocaleString("zh-CN"),text:`补卡(${fmtDisplay(d)})扣分`,points:-mc.cost});
+        data.makeupHistory.unshift({date:ds,cost:mc.cost,reason:mc.reason});
+      }else{
+        data.makeupUsed[mk]=(data.makeupUsed[mk]||0)+1;
+      }
+    }
+    checked.forEach(tid=>toggleTask(tid,true,null,ds));
+    ov.remove();
+    showToast(`${fmtDisplay(d)} 补卡完成`);
+  });
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.remove();});
+}
+
+/* 打卡日历（网格格式） */
+let miniCalDate=new Date();
+function renderMiniCalendar(){
+  const grid=document.getElementById("miniCalGrid");
+  const weekdaysEl=document.getElementById("miniCalWeekdays");
+  const label=document.getElementById("miniCalMonthLabel");
+  const year=miniCalDate.getFullYear(),month=miniCalDate.getMonth();
+  label.textContent=`${year}年${month+1}月`;
+  const weekdays=["一","二","三","四","五","六","日"];
+  weekdaysEl.innerHTML=weekdays.map(d=>`<div>周${d}</div>`).join("");
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const firstDay=new Date(year,month,1).getDay();
+  const startOffset=firstDay===0?6:firstDay-1;
+  let html="";
+  for(let i=0;i<startOffset;i++){
+    html+=`<div class="mini-cal-cell empty"></div>`;
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const doneIds=getCompleted(ds);
+    const isT=isToday(ds);
+    const future=isFuture(ds);
+    const tasks=doneIds.map(id=>TASKS.find(t=>t.id===id)).filter(Boolean).slice(0,10);
+    const hasMore=doneIds.length>10;
+    const cls=[isT?"today":"",doneIds.length>0?"has":""].filter(Boolean).join(" ");
+    html+=`<div class="mini-cal-cell ${cls}" data-date="${ds}" title="${ds}">
+      <div class="mini-cal-cell-date">${d}</div>
+      <div class="mini-cal-cell-tasks">
+        ${tasks.map(t=>`<div class="mini-cal-cell-task">
+          <input type="checkbox" checked disabled>
+          <span>${esc(t.title)}</span>
+        </div>`).join("")}
+        ${hasMore?`<div class="mini-cal-cell-more">+${doneIds.length-10}项</div>`:""}
+      </div>
+    </div>`;
+  }
+  grid.innerHTML=html;
+  grid.querySelectorAll(".mini-cal-cell:not(.empty)").forEach(c=>{
+    c.addEventListener("click",()=>{
+      const ds=c.dataset.date;
+      if(isToday(ds)){
+        switchSection("tasks");
+        renderAll();
+      }
+    });
+  });
+  document.getElementById("miniCalPrev").onclick=()=>{
+    miniCalDate=new Date(year,month-1,1);
+    renderMiniCalendar();
+  };
+  document.getElementById("miniCalNext").onclick=()=>{
+    miniCalDate=new Date(year,month+1,1);
+    renderMiniCalendar();
+  };
+}
+
+function renderMakeupHint(){
+  const hint=document.getElementById("makeupHint");
+  const taskHint=document.getElementById("makeupTaskHint");
+  const mk=getMonthKey(TODAY_STR);
+  const used=getMakeupUsed(mk);
+  if(used>=4){
+    hint.style.display="block";hint.innerHTML=`⚠ 本月补卡次数已用完（${used}/4次）。下月将重置。`;
+  }else{
+    hint.style.display="none";
+  }
+  if(!isToday(TODAY_STR)&&!isFuture(TODAY_STR)){
+    taskHint.style.display="block";
+    const mc=getMakeupCost(TODAY_STR);
+    taskHint.innerHTML=mc.allowed?(mc.cost>0?`📅 补卡模式：当月第${used+1}次免费，之后将扣分`:`📅 补卡模式（免费）`):`📅 ${mc.reason}`;
+  }else{
+    taskHint.style.display="none";
+  }
+}
+
+/* ======== CHECKPOINT MAP ======== */
+document.querySelectorAll(".checkpoint").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    activeMapCategory=btn.dataset.station;
+    selectedCategory=activeMapCategory;
+    renderAll();
+  });
+});
+document.getElementById("openGateTasks").addEventListener("click",()=>{selectedCategory=activeMapCategory;renderAll();switchSection("tasks");});
+document.getElementById("showAllTasks").addEventListener("click",()=>{selectedCategory="全部";renderAll();switchSection("tasks");});
+
+/* ======== RECOMMENDED & RESET ======== */
+document.getElementById("completeSuggested").addEventListener("click",()=>{
+  const recommended=["read-20","sport-30","screen"];
+  const done=new Set(todayCompleted());
+  let added=0;
+  recommended.forEach(id=>{
+    if(!done.has(id)){
+      const t=getActiveTasks().find(x=>x.id===id);
+      if(t){done.add(id);data.points+=t.pts;added++;}
+    }
+  });
+  if(added>0){
+    data.history.unshift({type:"earn",date:new Date().toLocaleString("zh-CN"),text:"一键完成推荐三项",points:added});
+    saveState();
+    celebrate();
+    showToast("推荐三项已存入成长账户。");
+  }else{
+    showToast("推荐任务今天已经完成了！");
+  }
+  data.completedByDate[TODAY_STR]=[...done];
+  saveState();renderAll();
+});
+
+document.getElementById("resetToday").addEventListener("click",()=>{
+  const doneIds=todayCompleted();
+  const score=getActiveTasks().filter(t=>doneIds.includes(t.id)).reduce((s,t)=>s+t.pts,0);
+  data.points=Math.max(0,data.points-score);
+  data.completedByDate[TODAY_STR]=[];
+  data.history.unshift({type:"reset",date:new Date().toLocaleString("zh-CN"),text:"清空今日打卡",points:-score});
+  saveState();
+  showToast("今日打卡已清空。");
+  renderAll();
+});
+
+document.getElementById("childName").addEventListener("input",e=>{
+  data.childName=e.target.value.trim();saveState();
+});
+
+/* ======== PARENT CENTER ======== */
+/* ======== 辅助函数 ======== */
+function genTaskId(){return"task_"+Date.now()+"_"+Math.random().toString(36).slice(2,6);}
+
+/* ======== 密码验证弹窗（通用） ======== */
+function showPasswordModal(hint,onSuccess){
+  if(!data.parentPinHash){onSuccess();return;}
+  const ov=document.createElement("div");ov.className="pin-overlay";
+  let dots=0;
+  let pin="";
+  ov.innerHTML=`<div class="pin-box">
+    <h3>🔒 验证家长密码</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:14px">${hint||"请输入家长密码确认"}</p>
+    <div class="pin-dots" style="margin-bottom:14px">${[0,1,2,3].map(i=>`<div class="pin-dot" id="pdot${i}"></div>`).join("")}</div>
+    <input class="pin-modal-input" id="pinModalInput" type="password" placeholder="输入4-6位数字" maxlength="6" inputmode="numeric">
+    <div class="modal-actions">
+      <button class="ghost" id="pinModalCancel" style="min-height:38px">取消</button>
+      <button class="primary" id="pinModalOk" style="min-height:38px">确认</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  const inp=ov.querySelector("#pinModalInput");
+  inp.focus();
+  inp.addEventListener("input",()=>{
+    pin=inp.value.replace(/\D/g,"");
+    dots=Math.min(pin.length,4);
+    for(let i=0;i<4;i++)ov.querySelector(`#pdot${i}`).classList.toggle("filled",i<dots);
+    if(pin.length>=4){setTimeout(()=>{verifyPin(pin).then(ok=>{if(ok){ov.remove();onSuccess();}else{showToast("密码错误");inp.value="";pin="";dots=0;for(let i=0;i<4;i++)ov.querySelector(`#pdot${i}`).classList.remove("filled");inp.focus();}});},200);}
+  });
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")inp.dispatchEvent(new Event("input"));});
+  ov.querySelector("#pinModalCancel").addEventListener("click",()=>ov.remove());
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.remove();});
+}
+
+/* ======== 任务管理弹窗 ======== */
+function openTaskManager(){
+  const ov=document.createElement("div");ov.className="modal-overlay";ov.style.zIndex="1000";
+  const hasCustom=(data.customTasks||[]).length;
+  ov.innerHTML=`<div class="modal-box" style="max-width:540px;max-height:88vh;display:flex;flex-direction:column">
+    <h3>📋 任务管理</h3>
+    <p style="color:var(--muted);font-size:12px;margin:4px 0 10px">管理所有打卡任务，敏感操作需家长密码验证。绿色=默认任务，橙色=自定义任务。</p>
+    <div style="padding:10px;border-radius:10px;background:rgba(226,245,223,.6);border:1px solid rgba(47,148,127,.18);margin-bottom:10px">
+      <h4 style="margin:0 0 7px;font-size:13px">➕ 新增自定义任务</h4>
+      <div style="display:flex;gap:5px;margin-bottom:6px">
+        <input id="newTaskTitle" placeholder="任务名称" style="flex:2;min-height:32px;padding:5px 8px;border-radius:7px;border:1px solid rgba(47,112,94,.18);font-size:12px;outline:none">
+        <select id="newTaskCat" style="flex:1;min-height:32px;padding:5px;border-radius:7px;border:1px solid rgba(47,112,94,.18);font-size:11px;background:#fff">
+          <option value="学习力">📚学习力</option><option value="运动力">⚽运动力</option><option value="自控力">⏰自控力</option><option value="探索力">🔍探索力</option><option value="实践力">🍳实践力</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:5px;align-items:center">
+        <label style="font-size:12px;font-weight:800">积分</label>
+        <select id="newTaskPts" style="min-height:32px;padding:5px;border-radius:7px;border:1px solid rgba(47,112,94,.18);font-size:12px;background:#fff">
+          <option value="1">1分</option><option value="2">2分</option><option value="3">3分</option>
+        </select>
+        <button class="primary" id="addTaskBtn" style="margin-left:auto;min-height:32px;padding:5px 12px;font-size:12px">添加</button>
+      </div>
+    </div>
+    <div id="taskListContainer" style="flex:1;overflow:auto;max-height:380px;margin-bottom:10px;padding-right:4px"></div>
+    <div class="modal-actions">
+      <button class="ghost" id="taskModalCancel">关闭</button>
+      <button class="primary" id="taskModalSave">保存并应用</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+
+  let workingDeleteIds=new Set();
+  let pendingNewTasks=[];
+
+  function renderTasks(){
+    const tc=ov.querySelector("#taskListContainer");
+    const allTasks=getActiveTasks();
+    const shown=allTasks.filter((t,i)=>!workingDeleteIds.has(i));
+    tc.innerHTML=shown.map((t,i)=>{
+      const realIdx=allTasks.findIndex((x,idx)=>!workingDeleteIds.has(idx)&&idx===allTasks.indexOf(t));
+      const isCustom=data.customTasks&&data.customTasks.some(ct=>ct.id===t.id);
+      return`<div class="task-manage-row">
+        <span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${isCustom?"var(--gold)":"var(--leaf)"}"></span>
+        <input class="task-edit-title" data-real="${realIdx}" value="${esc(t.title)}" style="flex:1;min-width:70px;font-weight:700">
+        <select class="task-edit-cat" data-real="${realIdx}" style="width:72px">
+          <option value="学习力" ${t.cat==="学习力"?"selected":""}>📚</option>
+          <option value="运动力" ${t.cat==="运动力"?"selected":""}>⚽</option>
+          <option value="自控力" ${t.cat==="自控力"?"selected":""}>⏰</option>
+          <option value="探索力" ${t.cat==="探索力"?"selected":""}>🔍</option>
+          <option value="实践力" ${t.cat==="实践力"?"selected":""}>🍳</option>
+        </select>
+        <select class="task-edit-pts" data-real="${realIdx}" style="width:52px">
+          <option value="1" ${t.pts===1?"selected":""}>1分</option>
+          <option value="2" ${t.pts===2?"selected":""}>2分</option>
+          <option value="3" ${t.pts===3?"selected":""}>3分</option>
+        </select>
+        <span style="font-size:10px;color:var(--muted);flex-shrink:0">${isCustom?"自定义":"默认"}</span>
+        <button class="task-del-btn" data-real="${realIdx}" title="删除">✕</button>
+      </div>`;
+    }).join("");
+
+    tc.querySelectorAll(".task-del-btn").forEach(b=>{
+      b.addEventListener("click",()=>{
+        const idx=parseInt(b.dataset.real);
+        const confirmDel=()=>{workingDeleteIds.add(idx);renderTasks();};
+        if(data.parentPinHash){showPasswordModal("删除任务需验证家长密码",confirmDel);}
+        else{confirmDel();}
+      });
+    });
+  }
+
+  function saveWorking(){
+    const allTasks=getActiveTasks();
+    const newDefaults=[];const newCustoms=[];
+    allTasks.forEach((t,rawIdx)=>{
+      if(workingDeleteIds.has(rawIdx))return;
+      const isCustom=data.customTasks&&data.customTasks.some(ct=>ct.id===t.id);
+      const row=[...ov.querySelectorAll(".task-manage-row")].find(r=>{
+        const inp=r.querySelector(".task-edit-title");return inp&&parseInt(inp.dataset.real)===rawIdx;
+      });
+      const newTitle=row?row.querySelector(".task-edit-title").value.trim():t.title;
+      const newCat=row?row.querySelector(".task-edit-cat").value:t.cat;
+      const newPts=row?parseInt(row.querySelector(".task-edit-pts").value):t.pts;
+      if(!newTitle)return;
+      const task={id:t.id,title:newTitle,cat:newCat,pts:newPts};
+      if(isCustom)newCustoms.push(task);else newDefaults.push(task);
+    });
+    pendingNewTasks.forEach(t=>{if(!data.customTasks)data.customTasks=[];data.customTasks.push(t);});
+    pendingNewTasks=[];
+    data.modifiedDefaultTasks=newDefaults;data.customTasks=newCustoms;
+    TASKS.length=0;newDefaults.forEach(t=>TASKS.push(t));saveState();
+  }
+
+  renderTasks();
+
+  ov.querySelector("#addTaskBtn").addEventListener("click",()=>{
+    const title=ov.querySelector("#newTaskTitle").value.trim();
+    const cat=ov.querySelector("#newTaskCat").value;
+    const pts=parseInt(ov.querySelector("#newTaskPts").value);
+    if(!title){showToast("请输入任务名称");return;}
+    pendingNewTasks.push({id:genTaskId(),title,pts,cat});
+    ov.querySelector("#newTaskTitle").value="";
+    // Append pending task to container
+    const tc=ov.querySelector("#taskListContainer");
+    const allTasks=getActiveTasks();
+    const pt=pendingNewTasks[pendingNewTasks.length-1];
+    const newIdx=allTasks.length+pendingNewTasks.length-1;
+    tc.insertAdjacentHTML("beforeend",`<div class="task-manage-row" style="border-color:rgba(231,172,44,.4);background:#fffde7">
+      <span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--gold)"></span>
+      <input class="task-edit-title" data-real="${newIdx}" value="${esc(pt.title)}" style="flex:1;min-width:70px;font-weight:700">
+      <select class="task-edit-cat" data-real="${newIdx}" style="width:72px">
+        <option value="学习力" ${pt.cat==="学习力"?"selected":""}>📚</option><option value="运动力">⚽</option><option value="自控力">⏰</option><option value="探索力">🔍</option><option value="实践力">🍳</option>
+      </select>
+      <select class="task-edit-pts" data-real="${newIdx}" style="width:52px">
+        <option value="1">1分</option><option value="2" selected>2分</option><option value="3">3分</option>
+      </select>
+      <span style="font-size:10px;color:var(--gold);flex-shrink:0">待保存</span>
+      <button class="task-del-btn" data-real="${newIdx}" title="移除">✕</button>
+    </div>`);
+    const lastRow=tc.lastElementChild;
+    lastRow.querySelector(".task-del-btn").addEventListener("click",()=>{pendingNewTasks.pop();lastRow.remove();});
+    showToast(`${pt.title} 已暂存 ✅`);
+  });
+
+  ov.querySelector("#newTaskTitle").addEventListener("keydown",e=>{if(e.key==="Enter")ov.querySelector("#addTaskBtn").click();});
+
+  ov.querySelector("#taskModalSave").addEventListener("click",()=>{
+    const onSave=()=>{saveWorking();ov.remove();renderAll();showToast("任务保存成功 ✅");};
+    if(data.parentPinHash){showPasswordModal("保存任务需验证家长密码",onSave);}
+    else{onSave();}
+  });
+  ov.querySelector("#taskModalCancel").addEventListener("click",()=>ov.remove());
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.remove();});
+}
+
+/* ======== 备份弹窗（增强版） ======== */
+function openBackupModal(){
+  const ov=document.createElement("div");ov.className="modal-overlay";ov.style.zIndex="1000";
+  const hasPwd=!!data.parentPinHash;
+  ov.innerHTML=`<div class="modal-box">
+    <h3>💾 数据备份与恢复</h3>
+    <p style="color:var(--muted);font-size:12px;margin-bottom:14px">导出备份可在换设备时一键恢复，导入会完全覆盖当前数据。</p>
+    <div class="backup-card">
+      <span>📤 导出当前备份</span>
+      <button class="secondary" id="pcExportBtn" style="min-height:34px;padding:6px 12px;font-size:12px">下载 .json</button>
+    </div>
+    <div class="backup-card">
+      <span>📥 导入备份恢复</span>
+      <button class="ghost" id="pcImportBtn" style="min-height:34px;padding:6px 12px;font-size:12px;${hasPwd?"color:var(--muted)":"color:var(--leaf-dark)"}">选择文件</button>
+    </div>
+    ${hasPwd?`<div class="backup-note">⚠ 导入需要验证家长密码（${data.parentPinHash?"已设置":"未设置"}）</div>`:""}
+    <div class="modal-actions">
+      <button class="ghost" id="pcBackupClose" style="min-height:36px">关闭</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector("#pcExportBtn").addEventListener("click",()=>{
+    const exportData={version:3,exportedAt:new Date().toISOString(),data};
+    const blob=new Blob([JSON.stringify(exportData,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;
+    a.download=`成长银行备份_${new Date().toISOString().slice(0,10)}.json`;a.click();
+    URL.revokeObjectURL(url);showToast("备份已下载 ✅");
+  });
+  ov.querySelector("#pcImportBtn").addEventListener("click",()=>{
+    const onImport=()=>{
+      const fi=document.createElement("input");fi.type="file";fi.accept=".json";
+      fi.onchange=()=>{
+        const f=fi.files[0];if(!f)return;
+        const r=new FileReader();
+        r.onload=()=>{
+          try{
+            const parsed=JSON.parse(r.result);
+            const d=parsed.data||parsed;
+            data={...freshState(),...d};saveState();renderAll();
+            showToast("数据恢复成功，请刷新页面 🎉");
+          }catch{showToast("文件格式错误，请确认是成长银行备份文件");}
+        };r.readAsText(f);
+      };fi.click();
+    };
+    if(hasPwd){showPasswordModal("导入数据需验证家长密码",onImport);}
+    else{
+      if(!confirm("导入将覆盖当前所有数据，确定继续吗？"))return;
+      onImport();
+    }
+  });
+  ov.querySelector("#pcBackupClose").addEventListener("click",()=>ov.remove());
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.remove();});
+}
+
+/* ======== 清除密码功能 ======== */
+function openClearPinModal(){
+  const onClear=()=>{data.parentPinHash="";saveState();showToast("家长密码已清除");};
+  if(data.parentPinHash){showPasswordModal("清除密码需先验证",onClear);}
+  else{showToast("当前未设置家长密码");}
+}
+
+function renderParent(){
+  // 渲染孩子列表
+  renderChildList();
+  
+  document.getElementById("parentNameField").value=data.childName||"";
+  document.getElementById("pinStatusText").textContent=`当前状态：${data.parentPinHash?"已设置 🔒":"未设置"}`;
+  // 历史
+  const ph=document.getElementById("parentHistory");
+  if(!data.history.length){ph.innerHTML=`<div class="empty">还没有积分记录。</div>`;}
+  else{ph.innerHTML=data.history.slice(0,20).map(h=>`<div class="history-item">
+    <span style="flex:1"><span class="muted" style="font-size:11px">${esc(h.date)}</span><br>${esc(h.text)}</span>
+    <span class="pts ${h.points>0?"earn":"redeem"}">${h.points>0?"+":""}${h.points}</span>
+  </div>`).join("");}
+  // 补卡历史
+  const mh=document.getElementById("makeupHistory");
+  if(!data.makeupHistory.length){mh.innerHTML=`<div class="empty">还没有补卡记录。</div>`;}
+  else{mh.innerHTML=data.makeupHistory.slice(0,10).map(m=>`<div class="history-item">
+    <span style="flex:1"><span class="muted" style="font-size:11px">${esc(m.date)}</span><br>${esc(m.reason)}</span>
+    <span class="pts" style="color:#9b503e">-${m.cost}</span>
+  </div>`).join("");}
+  document.getElementById("totalStat").textContent=calcTotalPoints();
+}
+
+document.getElementById("saveName").addEventListener("click",()=>{
+  data.childName=document.getElementById("parentNameField").value.trim();saveState();
+  document.getElementById("childName").value=data.childName;
+  showToast("姓名已保存 ✅");
+});
+
+document.getElementById("savePin").addEventListener("click",async()=>{
+  const p=document.getElementById("pinField").value.trim();
+  if(!p){showToast("请输入4-6位数字密码");return;}
+  if(p.length<4||p.length>6||!/^\d+$/.test(p)){showToast("密码需4-6位数字");return;}
+  const h=await hashPin(p);
+  if(h!==null){data.parentPinHash=h;saveState();document.getElementById("pinField").value="";renderParent();showToast("密码已设置 ✅");}
+  else{showToast("密码格式错误");}
+});
+
+document.getElementById("clearPin").addEventListener("click",openClearPinModal);
+document.getElementById("openBackup").addEventListener("click",openBackupModal);
+
+document.getElementById("openTaskMgr").addEventListener("click",()=>{
+  const onOpen=()=>{openTaskManager();};
+  if(data.parentPinHash){showPasswordModal("任务管理需验证家长密码",onOpen);}
+  else{onOpen();}
+});
+
+document.getElementById("resetData").addEventListener("click",()=>{
+  if(!confirm("确定要清空所有数据吗？此操作不可恢复！"))return;
+  data=freshState();localStorage.removeItem("summerGrowthBankV3");
+  renderAll();showToast("数据已重置");
+});
+
+/* ======== STARTUP ======== */
+window.addEventListener("load",()=>{
+  renderAll();
+  setupChildProfile();
+  setupHistoryPopup();
+  setupAddChild();
+});
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js?v=11").catch(()=>{});}
+
+/* ======== 宝贝信息弹窗 ======== */
+function setupChildProfile(){
+  const btn=document.getElementById("childProfileBtn");
+  const overlay=document.getElementById("childProfileOverlay");
+  const closeBtn=document.getElementById("closeChildProfile");
+  const saveBtn=document.getElementById("saveChildProfile");
+  const nameInput=document.getElementById("childNameInput");
+  const themeOptions=document.querySelectorAll(".theme-option");
+
+  if(!btn||!overlay){return;}
+
+  // 打开弹窗
+  btn.addEventListener("click",()=>{
+    nameInput.value=data.childName||"";
+    // 设置性别
+    const gender=data.childGender||"boy";
+    document.getElementById(gender==="boy"?"genderBoy":"genderGirl").checked=true;
+    // 设置主题
+    const theme=data.childTheme||"green";
+    themeOptions.forEach(opt=>opt.classList.toggle("active",opt.dataset.theme===theme));
+    overlay.style.display="flex";
+  });
+
+  // 关闭弹窗
+  closeBtn.addEventListener("click",()=>overlay.style.display="none");
+  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.style.display="none";});
+
+  // 主题选择
+  themeOptions.forEach(opt=>{
+    opt.addEventListener("click",()=>{
+      themeOptions.forEach(o=>o.classList.remove("active"));
+      opt.classList.add("active");
+    });
+  });
+
+  // 保存
+  saveBtn.addEventListener("click",()=>{
+    data.childName=nameInput.value.trim();
+    data.childGender=document.querySelector('input[name="childGender"]:checked')?.value||"boy";
+    data.childTheme=document.querySelector('.theme-option.active')?.dataset.theme||"green";
+    saveState();
+    overlay.style.display="none";
+    renderChildName();
+    showToast("宝贝信息已保存 ✅");
+  });
+}
+
+/* ======== 积分历史弹窗 ======== */
+function setupHistoryPopup(){
+  const coinPill=document.getElementById("coinPill");
+  const overlay=document.getElementById("historyOverlay");
+  const closeBtn=document.getElementById("closeHistory");
+
+  if(!coinPill||!overlay){return;}
+
+  // 打开弹窗
+  coinPill.style.cursor="pointer";
+  coinPill.addEventListener("click",()=>{
+    renderHistoryPopup();
+    overlay.style.display="flex";
+  });
+
+  // 关闭弹窗
+  closeBtn.addEventListener("click",()=>overlay.style.display="none");
+  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.style.display="none";});
+}
+
+/* ======== 添加孩子弹窗 ======== */
+function setupAddChild(){
+  const addBtn=document.getElementById("addChildBtn");
+  const overlay=document.getElementById("addChildOverlay");
+  const closeBtn=document.getElementById("closeAddChild");
+  const confirmBtn=document.getElementById("confirmAddChild");
+  const nameInput=document.getElementById("newChildName");
+
+  if(!addBtn||!overlay){return;}
+
+  // 打开弹窗
+  addBtn.addEventListener("click",()=>{
+    nameInput.value="";
+    document.getElementById("newGenderBoy").checked=true;
+    overlay.style.display="flex";
+  });
+
+  // 关闭弹窗
+  closeBtn.addEventListener("click",()=>overlay.style.display="none");
+  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.style.display="none";});
+
+  // 确认添加
+  confirmBtn.addEventListener("click",()=>{
+    const name=nameInput.value.trim();
+    if(!name){
+      showToast("请输入孩子姓名");
+      return;
+    }
+    const gender=document.querySelector('input[name="newChildGender"]:checked')?.value||"boy";
+    addChild(name,gender);
+    overlay.style.display="none";
+  });
+}
+
+/* ======== 多孩子管理 ======== */
+function renderChildList(){
+  const list=document.getElementById("childList");
+  const children=data.children||{};
+  const currentId=data.currentChildId||"default";
+  
+  // 如果没有children对象，显示当前单孩子
+  if(Object.keys(children).length===0){
+    list.innerHTML=`
+      <div class="child-item active">
+        <div>
+          <div class="child-name">${data.childName||"宝贝"}</div>
+          <div class="child-info">当前</div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  
+  // 渲染多个孩子
+  list.innerHTML=Object.keys(children).map(id=>{
+    const child=children[id];
+    const isActive=id===currentId;
+    return`
+      <div class="child-item ${isActive?"active":""}">
+        <div>
+          <div class="child-name">${child.childName||"宝贝"}</div>
+          <div class="child-info">积分: ${child.points||0} ${isActive?"· 当前":""}</div>
+        </div>
+        <div class="child-actions">
+          ${!isActive?`<button class="switch-btn" onclick="switchChild('${id}')">切换</button>`:""}
+          <button class="delete-btn" onclick="deleteChild('${id}')">删除</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function switchChild(childId){
+  // 保存当前孩子数据
+  saveCurrentChildData();
+  
+  // 切换到新孩子
+  data.currentChildId=childId;
+  const childData=data.children[childId];
+  
+  // 加载新孩子的数据
+  if(childData){
+    data.childName=childData.childName||"";
+    data.childGender=childData.childGender||"boy";
+    data.childTheme=childData.childTheme||"green";
+    data.points=childData.points||0;
+    data.completedByDate=childData.completedByDate||{};
+    data.history=childData.history||[];
+    data.goals=childData.goals||{};
+  }
+  
+  saveState();
+  renderAll();
+  showToast("已切换到 "+(data.childName||"宝贝")+" ✅");
+}
+
+function saveCurrentChildData(){
+  const currentId=data.currentChildId||"default";
+  if(!data.children)data.children={};
+  
+  // 保存当前孩子的所有数据
+  data.children[currentId]={
+    childName:data.childName,
+    childGender:data.childGender,
+    childTheme:data.childTheme,
+    points:data.points,
+    completedByDate:data.completedByDate,
+    history:data.history,
+    reviews:data.reviews,
+    works:data.works,
+    customRewards:data.customRewards,
+    makeupUsed:data.makeupUsed,
+    makeupHistory:data.makeupHistory,
+    goals:data.goals,
+    customTasks:data.customTasks,
+    modifiedDefaultTasks:data.modifiedDefaultTasks
+  };
+}
+
+function addChild(name,gender){
+  const childId="child_"+Date.now();
+  if(!data.children)data.children={};
+  
+  // 保存当前孩子数据
+  saveCurrentChildData();
+  
+  // 创建新孩子
+  data.children[childId]={
+    childName:name,
+    childGender:gender,
+    childTheme:"green",
+    points:0,
+    completedByDate:{},
+    history:[],
+    reviews:[],
+    works:[],
+    customRewards:{},
+    makeupUsed:{},
+    makeupHistory:[],
+    goals:{},
+    customTasks:null,
+    modifiedDefaultTasks:null
+  };
+  
+  // 切换到新孩子
+  data.currentChildId=childId;
+  data.childName=name;
+  data.childGender=gender;
+  data.childTheme="green";
+  data.points=0;
+  data.completedByDate={};
+  data.history=[];
+  data.goals={};
+  
+  saveState();
+  renderAll();
+  showToast("已添加 "+name+" ✅");
+}
+
+function deleteChild(childId){
+  if(!confirm("确定要删除这个孩子吗？所有数据将被清空！"))return;
+  
+  delete data.children[childId];
+  
+  // 如果删除的是当前孩子，切换到第一个孩子
+  if(data.currentChildId===childId){
+    const remainingIds=Object.keys(data.children);
+    if(remainingIds.length>0){
+      switchChild(remainingIds[0]);
+    }else{
+      // 没有其他孩子了，重置为默认
+      data.currentChildId="default";
+      data.childName="";
+      data.points=0;
+      data.completedByDate={};
+      data.history=[];
+    }
+  }
+  
+  saveState();
+  renderAll();
+  showToast("已删除");
+}
+
+function renderHistoryPopup(){
+  const list=document.getElementById("historyPopupList");
+  if(!data.history||data.history.length===0){
+    list.innerHTML="<div style='text-align:center;color:var(--muted);padding:40px 20px'>暂无积分记录</div>";
+    return;
+  }
+  // 按日期倒序显示最近30条
+  const items=data.history.slice(-30).reverse();
+  list.innerHTML=items.map(h=>`
+    <div class="history-item">
+      <div class="date">${h.date||""}</div>
+      <div class="desc">${h.text||h.desc||""}</div>
+      <div class="pts">${h.points>0?"+":""}${h.points||h.pts||0}分</div>
+    </div>
+  `).join("");
+}
+</script>
+</body>
+</html>

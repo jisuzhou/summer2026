@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -51,11 +51,25 @@ button{border:0;cursor:pointer}
 .app{min-height:100vh}
 .topbar{
   position:sticky;top:0;z-index:20;
-  display:flex;align-items:center;justify-content:space-between;gap:18px;
-  padding:18px 28px;
+  display:flex;flex-direction:column;gap:12px;
+  padding:14px 28px 18px;
   background:rgba(255,253,243,.88);border-bottom:1px solid rgba(47,112,94,.12);
   backdrop-filter:blur(18px);box-shadow:0 4px 22px rgba(57,88,65,.08);
 }
+.topbar-row{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.nav-row{
+  display:flex;justify-content:center;gap:6px;
+}
+.nav-row button{
+  padding:11px 16px;border-radius:999px;color:#46645a;
+  background:transparent;transition:180ms ease;white-space:nowrap;
+  border:0;cursor:pointer;font:inherit;
+}
+.nav-row button[aria-selected="true"]{color:#fff;background:var(--leaf);box-shadow:0 8px 18px rgba(47,148,127,.22)}
+.nav-row button .nav-dot{display:none;width:8px;height:8px;border-radius:50%;background:#4cd964;margin-left:6px;vertical-align:middle;flex-shrink:0}
+.nav-row button .nav-dot.show{display:inline-block}
 .brand{display:flex;align-items:center;gap:12px;min-width:255px}
 .brand-mark{
   width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
@@ -100,7 +114,7 @@ button{border:0;cursor:pointer}
   border:3px solid #fff;box-shadow:0 6px 16px rgba(47,80,62,.16);
 }
 .page{width:min(1560px,calc(100% - 40px));margin:24px auto 46px}
-.layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.layout{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;justify-items:center}
 .stack{display:grid;gap:16px}
 .panel{border-radius:var(--radius);background:var(--paper);border:1px solid rgba(64,116,91,.14);box-shadow:var(--soft-shadow);overflow:hidden}
 .panel-pad{padding:20px}
@@ -160,8 +174,9 @@ button{border:0;cursor:pointer}
 .mini-task span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .point{display:inline-flex;align-items:center;gap:5px;color:#8a671b;font-weight:900;white-space:nowrap}
 .message{display:grid;gap:8px;padding:14px;border-radius:8px;background:#fff8d9;border:1px solid rgba(214,166,45,.28);color:#684e17;line-height:1.55}
-.main-grid{display:grid;gap:20px}
+.main-grid{display:grid;gap:20px;width:100%;max-width:1100px}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px;align-items:stretch}
+#home.hero{grid-template-columns:1fr}
 .map-card{
   min-height:520px;position:relative;overflow:hidden;padding:24px;
   background:linear-gradient(135deg, rgba(255,249,218,.84), rgba(222,241,205,.8)),
@@ -234,6 +249,7 @@ button{border:0;cursor:pointer}
 .progress-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--leaf),#8ebf55);transition:width 260ms ease}
 .section{display:none}
 .section.active{display:block}
+.hidden-aside{display:none!important}
 .section-shell{padding:22px}
 .section-heading{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:18px}
 .section-heading h2{margin:0;font-size:clamp(25px,3vw,38px);line-height:1.05}
@@ -257,6 +273,17 @@ button{border:0;cursor:pointer}
   background:rgba(255,255,255,.72);border:1px solid rgba(47,112,94,.12);
   box-shadow:0 6px 18px rgba(45,83,61,.07);
 }
+.metric{text-align:center}
+
+/* 暑假成长地图列表 */
+.dimension-list{display:flex;flex-direction:column;gap:10px}
+.dimension-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;background:rgba(255,255,255,.7);border:1.5px solid rgba(47,112,94,.12);cursor:pointer;transition:150ms}
+.dimension-item:hover{background:rgba(255,255,255,.95);border-color:var(--leaf);transform:translateY(-1px);box-shadow:0 4px 12px rgba(47,148,127,.12)}
+.dimension-icon{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.dimension-body{flex:1;min-width:0}
+.dimension-body strong{font-size:15px;color:var(--leaf-dark);display:block}
+.dimension-body small{font-size:12px;color:var(--muted);display:block;margin-top:2px}
+.dimension-stat{font-size:13px;font-weight:800;color:var(--leaf);white-space:nowrap}
 .metric b{display:block;margin-top:8px;font-size:32px;line-height:1}
 .reward-card{display:grid;gap:13px;align-content:start;min-height:250px}
 .reward-level{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -517,6 +544,15 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
 .pin-modal-input{width:100%;min-height:40px;padding:9px 12px;border-radius:8px;border:1px solid rgba(47,112,94,.22);font-size:15px;outline:none;letter-spacing:4px;text-align:center;box-sizing:border-box}
 .pin-modal-input:focus{border-color:var(--leaf);box-shadow:0 0 0 4px rgba(47,148,127,.12)}
 
+/* ======== 日期编辑模态框 ======== */
+#dateEditModal .modal-box{max-width:480px}
+#dateEditTasks{max-height:50vh;overflow-y:auto;padding-right:4px}
+#dateEditTasks::-webkit-scrollbar{width:6px}
+#dateEditTasks::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+.date-edit-task{transition:all 120ms ease}
+.date-edit-task:hover{background:#e2e8f0 !important;transform:translateX(2px)}
+.date-edit-task input[type="checkbox"]{width:18px;height:18px;accent-color:#0d9488}
+
 /* 打卡规则提示 */
 .makeup-hint{
   margin-top:10px;padding:10px 14px;border-radius:8px;
@@ -525,7 +561,74 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
 }
 .makeup-hint .warning{color:#9b503e}
 
-/* 响应式 */
+/* ======== 登录/注册 ======== */
+.login-section{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.login-card{background:#fff;border-radius:16px;padding:36px 32px;max-width:420px;width:100%;box-shadow:var(--shadow);animation:modal-in 220ms ease}
+.login-card h2{text-align:center;margin:0 0 6px;font-size:26px;color:var(--ink)}
+.login-card .login-subtitle{text-align:center;margin:0 0 22px;color:var(--muted);font-size:13px;line-height:1.6}
+.auth-tabs{display:flex;gap:0;margin-bottom:22px;border-radius:8px;overflow:hidden;border:1px solid rgba(47,148,127,.18)}
+.auth-tab{flex:1;padding:11px;text-align:center;font-weight:800;font-size:14px;cursor:pointer;border:none;background:#e7f4df;color:var(--muted);transition:150ms}
+.auth-tab.active{background:var(--leaf);color:#fff}
+.auth-form{display:grid;gap:14px}
+.auth-field{display:grid;gap:6px}
+.auth-field label{font-size:13px;font-weight:800;color:var(--ink)}
+.auth-input{width:100%;min-height:42px;padding:10px 12px;border-radius:8px;border:1px solid rgba(47,112,94,.22);font-size:14px;outline:none;box-sizing:border-box;font-family:inherit}
+.auth-input:focus{border-color:var(--leaf);box-shadow:0 0 0 4px rgba(47,148,127,.12)}
+.auth-hint{font-size:11px;color:var(--muted);margin-top:2px}
+.auth-error{color:#e74c3c;font-size:12px;font-weight:700;text-align:center;padding:8px;border-radius:6px;background:#fdeaea;display:none}
+.auth-error.show{display:block}
+.auth-submit{width:100%;min-height:44px;border-radius:8px;background:var(--leaf);color:#fff;border:none;font-size:15px;font-weight:800;cursor:pointer;transition:150ms;margin-top:4px;box-shadow:0 6px 18px rgba(47,148,127,.22)}
+.auth-submit:hover{background:var(--leaf-dark);transform:translateY(-1px)}
+.login-main-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:8px;background:rgba(255,255,255,.6);border:1.5px solid rgba(47,148,127,.25);color:var(--leaf-dark);font-weight:800;font-size:13px;cursor:pointer;transition:150ms}
+.login-main-btn:hover{background:#e7f4df;border-color:var(--leaf)}
+.logout-btn{padding:8px 14px;border-radius:8px;background:#fff0e9;border:1.5px solid rgba(239,143,114,.3);color:#9b503e;font-weight:800;font-size:13px;cursor:pointer;transition:150ms}
+.logout-btn:hover{background:#ffe0d4}
+.user-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:#e7f4df;border:1.5px solid rgba(47,148,127,.25);font-weight:800;font-size:13px;color:var(--leaf-dark)}
+.user-chip .avatar-sm{width:28px;height:28px;border-radius:50%;background:var(--leaf);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900}
+
+/* ======== 分享面板 ======== */
+.share-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;background:linear-gradient(135deg,rgba(47,148,127,.1),rgba(142,191,85,.08));border:1.5px solid rgba(47,148,127,.2);margin-bottom:14px}
+.share-banner-icon{width:40px;height:40px;border-radius:50%;background:var(--leaf);display:grid;place-items:center;color:#fff;font-size:20px;flex-shrink:0}
+.share-banner p{margin:0;font-size:13px;color:var(--ink)}
+.share-banner strong{display:block;font-size:14px;margin-bottom:2px}
+.share-link-box{display:flex;gap:8px;margin:10px 0;align-items:center}
+.share-link-input{flex:1;min-height:38px;padding:8px 12px;border-radius:8px;border:1px solid rgba(47,148,127,.22);background:#f5fbf7;font-size:12px;color:var(--ink);outline:none;font-family:inherit;word-break:break-all}
+.copy-link-btn{min-height:38px;padding:8px 14px;border-radius:8px;background:var(--leaf);color:#fff;border:none;font-weight:800;font-size:13px;cursor:pointer;transition:150ms;white-space:nowrap}
+.copy-link-btn:hover{background:var(--leaf-dark)}
+.share-link-box small{display:block;margin-top:4px;font-size:11px;color:var(--muted)}
+.share-pending-list{display:grid;gap:10px;margin-top:14px}
+.share-pending-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:10px;background:rgba(255,255,255,.8);border:1.5px solid rgba(47,148,127,.15);box-shadow:0 4px 14px rgba(45,83,61,.07)}
+.share-pending-item .sp-icon{width:36px;height:36px;border-radius:50%;background:#e3f4d9;color:var(--leaf-dark);display:grid;place-items:center;font-size:16px;font-weight:900;flex-shrink:0}
+.share-pending-item .sp-body{flex:1;min-width:0}
+.share-pending-item .sp-name{font-weight:800;font-size:14px;color:var(--ink)}
+.share-pending-item .sp-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.share-pending-item .sp-detail{padding:8px 10px;border-radius:8px;background:#f5fbf7;border:1px solid rgba(47,148,127,.12);margin-top:8px;font-size:13px;line-height:1.6}
+.share-pending-item .sp-thumb{margin-top:8px;border-radius:8px;overflow:hidden;max-height:120px;background:#f0f4f0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted)}
+.share-pending-item .sp-thumb img{width:100%;height:120px;object-fit:cover;display:block;border-radius:8px;border:1px solid rgba(47,148,127,.12)}
+.share-pending-item .sp-thumb-video,.share-pending-item .sp-thumb-audio{padding:20px;text-align:center;border:1px dashed rgba(47,148,127,.2)}
+.share-pending-item .sp-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.share-member-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:#e7f4df;color:var(--leaf-dark);font-size:12px;font-weight:800}
+.share-empty{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px}
+.share-empty-icon{font-size:42px;margin-bottom:10px;opacity:.4}
+.share-perm-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.7);border:1px solid rgba(47,148,127,.12);margin-bottom:6px}
+.share-perm-row label{font-size:13px;font-weight:700;flex:1}
+.share-perm-row select{padding:4px 8px;border-radius:6px;border:1px solid rgba(47,148,127,.18);font-size:12px;background:#fff}
+.share-approve-btn{min-height:36px;padding:7px 14px;border-radius:8px;background:var(--leaf);color:#fff;border:none;font-weight:800;font-size:13px;cursor:pointer;transition:150ms}
+.share-approve-btn:hover{background:var(--leaf-dark)}
+.share-reject-btn{min-height:36px;padding:7px 14px;border-radius:8px;background:#fff0e9;color:#9b503e;border:1.5px solid rgba(239,143,114,.3);font-weight:800;font-size:13px;cursor:pointer;transition:150ms}
+.share-reject-btn:hover{background:#ffe0d4}
+
+/* ======== 成员提交审核区 ======== */
+.member-submit-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-radius:10px;background:linear-gradient(135deg,rgba(231,172,44,.12),rgba(47,148,127,.1));border:1.5px solid rgba(47,148,127,.2);margin-bottom:16px}
+.member-submit-bar p{margin:0;font-size:13px;color:var(--ink)}
+.member-submit-bar strong{display:block;font-size:14px;margin-bottom:2px}
+.submit-review-btn{min-height:38px;padding:8px 16px;border-radius:8px;background:var(--gold);color:#fff;border:none;font-weight:800;font-size:13px;cursor:pointer;transition:150ms;box-shadow:0 4px 12px rgba(231,172,44,.3)}
+.submit-review-btn:hover{background:#d4a01f;transform:translateY(-1px)}
+.member-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:#fff6cf;color:#8a671b;font-size:12px;font-weight:800;border:1px solid rgba(214,166,45,.3)}
+.member-mode-hint{padding:10px 16px;border-radius:8px;background:#e3f4d9;border:1px solid rgba(47,148,127,.2);color:var(--leaf-dark);font-size:13px;font-weight:800;text-align:center;margin-bottom:12px}
+.pending-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--rose);color:#fff;font-size:11px;font-weight:900}
+
+/* ======== 响应式 ======== */
 @media(max-width:1120px){
   .topbar{align-items:stretch;flex-direction:column}
   .brand,.profile{min-width:0}
@@ -552,32 +655,82 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
   .checkpoint:hover,.checkpoint.active{transform:translate(-50%,-3px)}
   .section-heading{display:block}
 }
+
+/* 首页推荐任务 */
+.suggested-tasks{display:flex;flex-direction:column;gap:10px}
+.suggested-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0}
+.suggested-item.checked{background:#ecfdf5;border-color:#a7f3d0}
+.suggested-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:50%;font-size:18px;box-shadow:0 1px 2px rgba(0,0,0,0.05)}
+.suggested-item span:nth-child(2){font-size:14px;color:#334155;font-weight:500}
+.suggested-item.checked span:nth-child(2){text-decoration:line-through;color:#059669}
+
+/* 首页小目标 - 6维度目标列表 */
+.home-goal-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border-radius:12px;border:1px solid #e5e7eb;margin-bottom:10px;transition:all 150ms ease}
+.home-goal-item:hover{border-color:#d1d5db;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.home-goal-item.checked{background:#f0fdf4;border-color:#86efac}
+.home-goal-item input[type="checkbox"]{width:20px;height:20px;cursor:pointer;accent-color:#059669;flex-shrink:0}
+.home-goal-item .goal-label{font-weight:700;color:#059669;font-size:15px;flex-shrink:0;min-width:90px}
+.home-goal-item .goal-input{flex:1;border:none;background:transparent;font-size:15px;color:#374151;outline:none;padding:4px 0}
+.home-goal-item .goal-input::placeholder{color:#9ca3af}
+.home-goal-item.checked .goal-input{text-decoration:line-through;color:#059669}
+.home-goal-item.checked .goal-input::placeholder{color:#86efac}
+
+/* 推荐任务勾选框样式 */
+.suggested-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  background: var(--sky);
+  transition: all 0.2s;
+}
+.suggested-item:hover {
+  background: var(--mint);
+}
+.suggested-item.checked {
+  background: #d1fae5;
+}
+.suggested-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--leaf);
+}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true"></div>
-      <div><h1>暑假成长积分银行</h1><p>记录每一点努力，看见每一次成长</p></div>
+    <div class="topbar-row">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div><h1>暑假成长积分银行</h1><p>记录每一点努力，看见每一次成长</p></div>
+      </div>
+      <div class="profile">
+        <!-- 未登录状态：只显示登录/注册 -->
+        <div id="authAreaLoggedOut">
+          <button class="login-main-btn" id="openLoginBtn" type="button" onclick="openAuthModal('login')">🔐 登录 / 注册</button>
+        </div>
+        <!-- 已登录状态：只显示宝贝、成长分、家长中心 -->
+        <div id="authAreaLoggedIn" style="display:none;align-items:center;gap:8px">
+          <button class="profile-child-btn" type="button" id="childProfileBtn"><span id="topChildName">宝贝</span></button>
+          <div class="coin-pill" id="coinPill" aria-live="polite"><span class="coin">分</span><span id="topPoints">0</span></div>
+          <button class="profile-parent-btn" type="button" data-target="parent">家长中心</button>
+        </div>
+      </div>
     </div>
-    <nav class="nav" aria-label="页面导航">
-      <button type="button" data-target="home" aria-selected="true">成长地图</button>
-      <button type="button" data-target="tasks" aria-selected="false">今日打卡</button>
-      <button type="button" data-target="review" aria-selected="false">每周复盘</button>
+    <nav class="nav-row" aria-label="页面导航">
+      <button type="button" data-target="home" aria-selected="true">首页</button>
+      <button type="button" data-target="tasks" aria-selected="false">今日打卡<span class="nav-dot" id="dotTasks"></span></button>
+      <button type="button" data-target="review" aria-selected="false">每周复盘<span class="nav-dot" id="dotReview"></span></button>
       <button type="button" data-target="rewards" aria-selected="false">奖励兑换</button>
       <button type="button" data-target="works" aria-selected="false">成长作品</button>
     </nav>
-    <div class="profile">
-      <button class="profile-child-btn" type="button" id="childProfileBtn"><span id="topChildName">宝贝</span></button>
-      <div class="coin-pill" id="coinPill" aria-live="polite"><span class="coin">分</span><span id="topPoints">0</span></div>
-      <button class="profile-parent-btn" type="button" data-target="parent">家长中心</button>
-    </div>
   </header>
 
   <main class="page">
     <div class="layout">
-      <aside class="stack" aria-label="今日概览">
+      <aside class="stack hidden-aside" aria-label="今日概览">
         <section class="panel panel-pad">
           <div class="panel-head">
             <h2 class="panel-title"><span class="small-icon">今</span>今日任务</h2>
@@ -624,66 +777,44 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
 
       <div class="main-grid">
         <section class="hero section active" id="home">
-          <div class="panel map-card" aria-label="暑假成长地图">
-            <div class="map-title">
-              <h2>我的暑假成长地图</h2>
-              <p>点击一个关卡，打开今天这一类的成长任务。完成后，关卡会被点亮。</p>
+          <!-- ① 今日任务推荐 -->
+          <div class="panel panel-pad" style="margin-bottom:16px">
+            <div class="panel-head" style="margin-bottom:14px;justify-content:space-between">
+              <h2 class="panel-title"><span class="small-icon">⭐</span>今日任务推荐</h2>
+              <button class="secondary" type="button" id="homeCompleteSuggested" onclick="handleCompleteSuggested()">完成推荐三项</button>
             </div>
-            <div class="quest-board">
-              <div class="quest-route" aria-label="五大成长闯关路线">
-                <button class="checkpoint" type="button" data-station="学习力" style="left:4%;top:18%">
-                  <span class="checkpoint-number">1</span>
-                  <strong>学习力</strong>
-                  <small>阅读、练字、复盘，让学习变成稳定的小习惯。</small>
-                  <span class="stars" data-stars="学习力"></span>
-                </button>
-                <button class="checkpoint" type="button" data-station="运动力" style="left:35%;top:5%">
-                  <span class="checkpoint-number">2</span>
-                  <strong>运动力</strong>
-                  <small>运动和户外，让身体先充满暑假的电量。</small>
-                  <span class="stars" data-stars="运动力"></span>
-                </button>
-                <button class="checkpoint" type="button" data-station="自控力" style="left:72%;top:22%">
-                  <span class="checkpoint-number">3</span>
-                  <strong>自控力</strong>
-                  <small>安排时间、管理屏幕，把计划握在自己手里。</small>
-                  <span class="stars" data-stars="自控力"></span>
-                </button>
-                <button class="checkpoint" type="button" data-station="探索力" style="left:20%;top:62%">
-                  <span class="checkpoint-number">4</span>
-                  <strong>探索力</strong>
-                  <small>兴趣、情绪和沟通，找到属于自己的好奇心。</small>
-                  <span class="stars" data-stars="探索力"></span>
-                </button>
-                <button class="checkpoint" type="button" data-station="实践力" style="left:62%;top:68%">
-                  <span class="checkpoint-number">5</span>
-                  <strong>实践力</strong>
-                  <small>家务、做饭、志愿服务，把成长做出来。</small>
-                  <span class="stars" data-stars="实践力"></span>
-                </button>
-              </div>
-              <div class="gate-task-panel" aria-live="polite">
-                <h3 id="gateTaskTitle">学习力任务</h3>
-                <p id="gateTaskIntro">点击左侧关卡，查看该类型今日可以打卡的任务。</p>
-                <div class="gate-task-list" id="gateTaskList"></div>
-                <div class="gate-actions">
-                  <button class="primary" type="button" id="openGateTasks">打开完整打卡页</button>
-                  <button class="ghost" type="button" id="showAllTasks">查看全部任务</button>
-                </div>
-              </div>
+            <div class="suggested-tasks" id="suggestedTasks">
+              <div class="suggested-item"><span class="suggested-icon">📖</span><span>阅读 20 分钟</span></div>
+              <div class="suggested-item"><span class="suggested-icon">🏃</span><span>运动 30 分钟</span></div>
+              <div class="suggested-item"><span class="suggested-icon">📱</span><span>减少屏幕时间</span></div>
             </div>
           </div>
 
-          <aside class="panel panel-pad treasure-panel">
-            <div class="panel-head">
-              <h2 class="panel-title"><span class="small-icon">箱</span>奖励宝箱</h2>
+          <!-- ② 我的暑假小目标 -->
+          <div class="panel panel-pad" style="margin-bottom:16px">
+            <div class="panel-head" style="margin-bottom:14px">
+              <h2 class="panel-title"><span class="small-icon">🎯</span>我的暑假小目标</h2>
             </div>
-            <div class="chest" aria-hidden="true"><div class="lock"></div></div>
-            <div>
-              <strong id="treasureText">再存入 10 分，开启小奖励。</strong>
-              <div class="progress-track" style="margin-top:12px"><div class="progress-fill" id="treasureProgress"></div></div>
+            <div class="goals-list" id="homeGoalsList"></div>
+          </div>
+
+          <!-- ③ 我的数据目标 -->
+          <div class="panel panel-pad" style="margin-bottom:16px">
+            <div class="panel-head" style="margin-bottom:14px">
+              <h2 class="panel-title"><span class="small-icon">📊</span>我的数据目标</h2>
             </div>
-            <button class="secondary" type="button" data-target="rewards">查看奖励</button>
+            <div class="insight-grid" style="grid-template-columns:repeat(3,1fr)">
+              <div class="metric"><span class="muted">今日完成</span><b id="doneCount">0</b></div>
+              <div class="metric"><span class="muted">今日存入</span><b id="todayPoints">0</b></div>
+              <div class="metric"><span class="muted">点亮维度</span><b id="categoryCount">0/5</b></div>
+            </div>
+          </div>
+
+          <!-- ④ 日历 -->
+          <div class="panel panel-pad" style="margin-bottom:16px">
+            <div class="panel-head" style="margin-bottom:10px">
+              <h2 class="panel-title"><span class="small-icon">📅</span>日历</h2>
+            </div>
             <div class="mini-calendar-wrap" id="miniCalendarWrap">
               <div class="mini-cal-header">
                 <h3 id="miniCalMonthLabel">打卡日历</h3>
@@ -695,21 +826,42 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
               <div class="mini-cal-weekdays" id="miniCalWeekdays"></div>
               <div class="mini-cal-grid" id="miniCalGrid"></div>
             </div>
-            <div class="message">
-              <strong>家庭支持约定</strong>
-              <span>孩子提出需要，家长给出支持；每周一次小会议，让计划跟着真实状态调整。</span>
+          </div>
+
+          <!-- ⑤ 暑假成长地图 -->
+          <div class="panel panel-pad">
+            <div class="panel-head" style="margin-bottom:14px">
+              <h2 class="panel-title"><span class="small-icon">🗺️</span>暑假成长地图</h2>
             </div>
-          </aside>
+            <div class="dimension-list" id="dimensionList"></div>
+          </div>
         </section>
 
         <section class="panel section" id="tasks">
           <div class="section-shell">
+            <!-- 成员模式提示条 -->
+            <div class="member-submit-bar" id="memberSubmitBar" style="display:none">
+              <div>
+                <strong>📝 成员编辑模式</strong>
+                <p>你的编辑将提交给账号所有者审核后生效</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="member-badge">👤 <span id="memberOwnerName">分享者</span> 的成长银行</span>
+                <button class="submit-review-btn" id="submitReviewBtn" type="button" onclick="submitForReview()">提交审核</button>
+              </div>
+            </div>
+
+            <!-- 分享者待审核提示 -->
+            <div class="member-mode-hint" id="ownerPendingHint" style="display:none">
+              📬 有 <span id="ownerPendingCount">0</span> 条成员提交待你审核，请到「家长中心 → 待审核提交」查看
+            </div>
+
             <div class="section-heading">
               <div>
                 <h2>今日成长任务</h2>
-                <p>五大能量均衡存入，重点方向可以多加一点。</p>
+                <p id="taskSubtitle">五大能量均衡存入，重点方向可以多加一点。</p>
               </div>
-              <div class="review-actions">
+              <div class="review-actions" id="taskActions">
                 <button class="secondary" type="button" id="completeSuggested">完成推荐三项</button>
                 <button class="ghost danger" type="button" id="resetToday">清空今日</button>
               </div>
@@ -831,6 +983,7 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
                 <div class="work-actions">
                   <button class="secondary" type="button" id="openBackup">备份与恢复</button>
                   <button class="ghost danger" type="button" id="resetData">清空数据</button>
+                  <button class="ghost danger" type="button" id="logoutBtn" style="min-height:auto">退出登录</button>
                 </div>
               </div>
               <div class="review-card">
@@ -850,16 +1003,52 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
                 </div>
               </div>
             </div>
+
+            <!-- 分享与成员管理 -->
+            <div class="share-banner" id="shareBanner" style="margin-top:18px">
+              <div class="share-banner-icon">🔗</div>
+              <div>
+                <strong>分享给家庭成员</strong>
+                <p>生成分享链接，成员可以通过链接编辑并提交任务给你的审核。</p>
+              </div>
+            </div>
+
+            <!-- 分享链接 -->
+            <div class="review-card" style="margin-top:14px">
+              <h3>🔗 生成分享链接</h3>
+              <div class="share-perm-row">
+                <label>成员权限</label>
+                <select id="sharePermSelect">
+                  <option value="edit_submit">可编辑并提交审核</option>
+                  <option value="view_only">仅查看（不可编辑）</option>
+                </select>
+              </div>
+              <div class="share-link-box">
+                <input class="share-link-input" id="shareLinkInput" type="text" readonly placeholder="点击「生成链接」创建分享链接">
+                <button class="copy-link-btn" id="genShareLinkBtn" type="button" onclick="generateShareLink()">生成链接</button>
+              </div>
+              <div id="shareLinkHint" style="font-size:12px;color:var(--muted);margin-top:6px;display:none">
+                将链接复制给家庭成员，他们可以参与成长记录并提交给你审核。
+              </div>
+            </div>
+
+            <!-- 成员提交列表 -->
+            <div class="review-card" style="margin-top:14px">
+              <h3>
+                📬 待审核提交
+                <span class="pending-badge" id="pendingBadge" style="display:none">0</span>
+              </h3>
+              <div id="sharePendingList"></div>
+            </div>
+
+            <!-- 已加入成员 -->
+            <div class="review-card" style="margin-top:14px">
+              <h3>👥 已加入的成员</h3>
+              <div id="shareMemberList"></div>
+            </div>
           </div>
         </section>
 
-        <section class="panel panel-pad">
-          <div class="insight-grid">
-            <div class="metric"><span class="muted">今日完成</span><b id="doneCount">0</b></div>
-            <div class="metric"><span class="muted">今日存入</span><b id="todayPoints">0</b></div>
-            <div class="metric"><span class="muted">点亮维度</span><b id="categoryCount">0/5</b></div>
-          </div>
-        </section>
       </div>
     </div>
   </main>
@@ -867,6 +1056,47 @@ textarea{width:100%;min-height:118px;resize:vertical;padding:12px;border-radius:
 
 <div class="firework-layer" id="fireworkLayer" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- 登录/注册弹窗 -->
+<div class="child-profile-overlay" id="authOverlay" style="display:none">
+  <div class="login-card" style="position:relative">
+    <button class="close-btn" id="closeAuth" style="position:absolute;top:12px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:#f5f5f5;color:#666;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:150ms">×</button>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2f947f,#16705e);display:grid;place-items:center;margin:0 auto 12px;box-shadow:0 8px 18px rgba(47,148,127,.25)">
+        <span style="font-size:28px">🌱</span>
+      </div>
+      <h2 id="authTitle">登录账号</h2>
+      <p class="login-subtitle" id="authSubtitle">登录后可以分享给家庭成员一起参与成长记录</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" type="button" onclick="setAuthMode('login')">登录</button>
+      <button class="auth-tab" id="tabReg" type="button" onclick="setAuthMode('register')">注册</button>
+    </div>
+    <div id="authError" class="auth-error"></div>
+    <form class="auth-form" id="authForm" onsubmit="return false">
+      <div class="auth-field">
+        <label for="authUsername">用户名</label>
+        <input class="auth-input" id="authUsername" type="text" placeholder="输入用户名（3-20个字符）" maxlength="20" autocomplete="username">
+      </div>
+      <div class="auth-field">
+        <label for="authPassword">密码</label>
+        <input class="auth-input" id="authPassword" type="password" placeholder="输入密码（6位以上）" maxlength="20" autocomplete="current-password">
+      </div>
+      <div class="auth-field" id="authNameField" style="display:none">
+        <label for="authDisplayName">显示名称</label>
+        <input class="auth-input" id="authDisplayName" type="text" placeholder="你的名字（如：爸爸、妈妈）" maxlength="10">
+      </div>
+      <button class="auth-submit" id="authSubmitBtn" type="button" onclick="(async()=>{try{const b=document.getElementById('authSubmitBtn');if(b)b.textContent='处理中...';const l=document.getElementById('tabLogin');if(l&&l.classList.contains('active')){await doLogin();}else{await doRegister();}}catch(e){showAuthError('错误:'+e.message);}if(b)b.textContent='登录';})()">登录</button>
+    </form>
+    <div class="auth-divider" id="authDivider" style="display:none">或</div>
+    <div style="text-align:center" id="authGuestArea">
+      <p style="color:var(--muted);font-size:12px;margin:0 0 10px">不登录也可以使用，但无法使用分享功能</p>
+      <button class="login-main-btn" id="guestContinueBtn" type="button" style="margin:0 auto">
+        <span>👶</span> 游客模式继续使用
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- 宝贝信息弹窗 -->
 <div class="child-profile-overlay" id="childProfileOverlay" style="display:none">
@@ -1058,7 +1288,7 @@ function isPastLocked(ds){
 /* ======== MEDIA STORAGE (IndexedDB) ======== */
 function openDB(){return new Promise((rs,rj)=>{const r=indexedDB.open("SummerGrowthBank",1);r.onupgradeneeded=e=>{if(!e.target.result.objectStoreNames.contains("media"))e.target.result.createObjectStore("media",{keyPath:"id"});};r.onsuccess=e=>rs(e.target.result);r.onerror=e=>rj(e.target.error);});}
 async function saveMedia(id,dataUrl){const db=await openDB();return new Promise((rs,rj)=>{const tx=db.transaction("media","readwrite");tx.objectStore("media").put({id,dataUrl});tx.oncomplete=rs;tx.onerror=rj;});}
-async function getMedia(id){try{const db=await openDB();return new Promise((rs,rj)=>{const tx=db.transaction("media","readonly");const r=tx.objectStore("media").get(id);r.onsuccess=()=>rs(r.result?r.result.dataUrl:null);r.onerror=rj;});}catch{return null;}}
+async function getMedia(id){try{const db=await openDB();return new Promise((rs,rj)=>{const tx=db.transaction("media","readonly");const r=tx.objectStore("media").get(id);r.onsuccess=()=>rs(r.result?r.result.dataUrl:null);r.onerror=rj;});}catch(e){return null;}}
 
 /* ======== PASSWORD ======== */
 async function hashPin(p){
@@ -1104,7 +1334,7 @@ function loadState(){
       works:s.works||[],
       parentPinHash:s.parentPinHash||""
     };
-  }catch{return freshState();}
+  }catch(e){return freshState();}
 }
 function saveState(){
   try{
@@ -1136,7 +1366,7 @@ function playCoinSound(){
       o.connect(g);g.connect(audioCtx.destination);
       o.start(now+i*.06);o.stop(now+i*.06+.18);
     });
-  }catch{}
+  }catch(e){}
 }
 
 /* ======== EFFECTS ======== */
@@ -1246,27 +1476,55 @@ function showToast(txt){
 /* ======== NAVIGATION ======== */
 function switchSection(id){
   document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));
-  document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.target===id)));
+  document.querySelectorAll(".nav-row button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.target===id)));
   window.scrollTo({top:0,behavior:"smooth"});
 }
 document.querySelectorAll("[data-target]").forEach(b=>b.addEventListener("click",()=>switchSection(b.dataset.target)));
 
 /* ======== RENDER ======== */
 function renderAll(){
-  renderChildName();
-  renderMetrics();
-  renderTabs();
-  renderTasks();
-  renderGateTasks();
-  renderPreview();
-  renderGoals();
-  renderRewards();
-  renderReviews();
-  renderWorks();
-  renderMakeupCal();
-  renderMakeupHint();
-  renderMiniCalendar();
-  renderParent();
+  console.log("[RENDER] renderAll start", "data:", data);
+  try{renderChildName()}catch(e){console.error("renderChildName:",e)}
+  try{renderMetrics()}catch(e){console.error("renderMetrics:",e)}
+  try{renderTabs()}catch(e){console.error("renderTabs:",e)}
+  try{renderTasks()}catch(e){console.error("renderTasks:",e)}
+  try{renderGrowthMap()}catch(e){console.error("renderGrowthMap:",e)}
+  try{renderPreview()}catch(e){console.error("renderPreview:",e)}
+  try{renderGoals()}catch(e){console.error("renderGoals:",e)}
+  try{renderSuggestedTasks()}catch(e){console.error("renderSuggestedTasks:",e)}
+  try{renderHomeGoals()}catch(e){console.error("renderHomeGoals:",e)}
+  try{renderRewards()}catch(e){console.error("renderRewards:",e)}
+  try{renderReviews()}catch(e){console.error("renderReviews:",e)}
+  try{renderWorks()}catch(e){console.error("renderWorks:",e)}
+  try{renderMakeupCal()}catch(e){console.error("renderMakeupCal:",e)}
+  try{renderMakeupHint()}catch(e){console.error("renderMakeupHint:",e)}
+  try{renderMiniCalendar()}catch(e){console.error("renderMiniCalendar:",e)}
+  try{renderParent()}catch(e){console.error("renderParent:",e)}
+  try{renderNavStatus()}catch(e){console.error("renderNavStatus:",e)}
+}
+
+// 更新导航栏状态指示灯
+function renderNavStatus(){
+  const dotReview=document.getElementById("dotReview");
+  const dotTasks=document.getElementById("dotTasks");
+  
+  // 每周复盘：本周有复盘记录 → 绿点
+  const weekStart=new Date();
+  weekStart.setDate(weekStart.getDate()-weekStart.getDay()+1);
+  weekStart.setHours(0,0,0,0);
+  const weekEnd=new Date(weekStart);
+  weekEnd.setDate(weekEnd.getDate()+6);
+  weekEnd.setHours(23,59,59,999);
+  const hasReview=Array.isArray(data.reviews)&&data.reviews.some(r=>{
+    if(!r.date)return false;
+    const d=new Date(r.date);
+    return d>=weekStart&&d<=weekEnd;
+  });
+  if(dotReview)dotReview.classList.toggle("show",hasReview);
+  
+  // 今日打卡：当天有完成记录 → 绿点
+  const doneToday=(data.completedByDate&&data.completedByDate[TODAY_STR]?.length)||0;
+  if(dotTasks)dotTasks.classList.toggle("show",doneToday>0);
 }
 
 function renderChildName(){
@@ -1287,8 +1545,10 @@ function renderMetrics(){
 
   const nextR=REWARDS.find(r=>r.cost>calcTotalPoints())||REWARDS[REWARDS.length-1];
   const pct=Math.min(100,Math.round((calcTotalPoints()/nextR.cost)*100));
-  document.getElementById("treasureProgress").style.width=pct+"%";
-  document.getElementById("treasureText").textContent=calcTotalPoints()>=60?"大奖励宝箱已经可以开启。":`再存入 ${nextR.cost-calcTotalPoints()} 分，开启${nextR.title.replace(/^[0-9]+分/,"")}。`;
+  const tp=document.getElementById("treasureProgress");
+  if(tp)tp.style.width=pct+"%";
+  const tt=document.getElementById("treasureText");
+  if(tt)tt.textContent=calcTotalPoints()>=60?"大奖励宝箱已经可以开启。":`再存入 ${nextR.cost-calcTotalPoints()} 分，开启${nextR.title.replace(/^[0-9]+分/,"")}。`;
   document.getElementById("encourageTitle").textContent=doneIds.length?"今日成长存款成功":"今日成长存款单";
   document.getElementById("encourageText").textContent=doneIds.length?`今天已完成 ${doneIds.length} 项，存入 ${todayScore} 分。继续保持小步前进。`:"完成任意一项任务，就能存入新的成长能量。";
 
@@ -1331,22 +1591,64 @@ function renderTasks(){
 function renderGateTasks(){
   const done=todayCompleted();
   const catTasks=getActiveTasks().filter(t=>t.cat===activeMapCategory);
-  document.getElementById("gateTaskTitle").textContent=`${activeMapCategory}任务`;
-  document.getElementById("gateTaskIntro").textContent=CAT_INTRO[activeMapCategory]||"";
+  const titleEl=document.getElementById("gateTaskTitle");
+  if(titleEl)titleEl.textContent=`${activeMapCategory}任务`;
+  const introEl=document.getElementById("gateTaskIntro");
+  if(introEl)introEl.textContent=CAT_INTRO[activeMapCategory]||"";
   document.querySelectorAll(".checkpoint").forEach(btn=>{
     btn.classList.toggle("active",btn.dataset.station===activeMapCategory);
     btn.setAttribute("aria-pressed",String(btn.dataset.station===activeMapCategory));
   });
-  document.getElementById("gateTaskList").innerHTML=catTasks.map(t=>{
-    const checked=done.includes(t.id);
-    return`<label class="gate-task">
-      <input type="checkbox" data-gate-task="${t.id}" ${checked?"checked":""}>
-      <span>${esc(t.title)}</span>
-      <span class="point">+${t.pts}</span>
-    </label>`;
+  const listEl=document.getElementById("gateTaskList");
+  if(listEl){
+    listEl.innerHTML=catTasks.map(t=>{
+      const checked=done.includes(t.id);
+      return`<label class="gate-task">
+        <input type="checkbox" data-gate-task="${t.id}" ${checked?"checked":""}>
+        <span>${esc(t.title)}</span>
+        <span class="point">+${t.pts}</span>
+      </label>`;
+    }).join("");
+    document.querySelectorAll("#gateTaskList input").forEach(inp=>{
+      inp.addEventListener("change",ev=>toggleTask(inp.dataset.gate,inp.checked,ev,TODAY_STR));
+    });
+  }
+}
+
+function renderGrowthMap(){
+  console.log("[RENDER] renderGrowthMap start");
+  const el=document.getElementById("dimensionList");
+  if(!el)return;
+  const done=todayCompleted();
+  const allTasks=getActiveTasks();
+  const dimensionColors={学习力:["#e3f2f9","#2f7d9e"],运动力:["#e3f4d9","#3b8c5c"],自控力:["#fef3d9","#c49028"],探索力:["#f0e6fa","#7b52ab"],实践力:["#fde8e0","#c9623c"]};
+  el.innerHTML=CATEGORIES.map((cat,i)=>{
+    const catTasks=allTasks.filter(t=>t.cat===cat);
+    const doneCount=catTasks.filter(t=>done.includes(t.id)).length;
+    const total=catTasks.length;
+    const icon=CAT_ICONS[cat]||"📌";
+    const colors=dimensionColors[cat]||["#e3f4d9","#2f947f"];
+    const pct=total>0?Math.round(doneCount/total*100):0;
+    return`<div class="dimension-item" data-station="${cat}">
+      <div class="dimension-icon" style="background:${colors[0]};color:${colors[1]}">${icon}</div>
+      <div class="dimension-body">
+        <strong>${cat}</strong>
+        <small>${CAT_INTRO[cat]||""}</small>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+          <div class="progress-track" style="flex:1;height:6px;background:#eef3ef"><div class="progress-fill" style="width:${pct}%;background:${colors[1]};height:6px"></div></div>
+          <span class="dimension-stat">${doneCount}/${total}</span>
+        </div>
+      </div>
+    </div>`;
   }).join("");
-  document.querySelectorAll("#gateTaskList input").forEach(inp=>{
-    inp.addEventListener("change",ev=>toggleTask(inp.dataset.gate,inp.checked,ev,TODAY_STR));
+  // 点击维度：跳转到该类别打卡页
+  el.querySelectorAll(".dimension-item").forEach(item=>{
+    item.addEventListener("click",()=>{
+      const cat=item.dataset.station;
+      selectedCategory=cat;
+      renderAll();
+      switchSection("tasks");
+    });
   });
 }
 
@@ -1400,6 +1702,69 @@ function renderGoals(){
   });
   list.querySelectorAll(".goal-input").forEach(inp=>{
     inp.addEventListener("input",()=>{
+      const key=inp.dataset.goalText;
+      if(!data.goals)data.goals={};
+      data.goals[key+"Text"]=inp.value;
+      saveState();
+    });
+  });
+}
+
+// 首页推荐任务（动态渲染）
+function renderSuggestedTasks(){
+  const container=document.getElementById("suggestedTasks");
+  if(!container)return;
+  const recommended=["read-20","sport-30","screen"];
+  const done=new Set(todayCompleted());
+  const tasks=getActiveTasks();
+  container.innerHTML=recommended.map(id=>{
+    const t=tasks.find(x=>x.id===id);
+    if(!t)return"";
+    const checked=done.has(id);
+    const title=t.title||t.name||id;
+    const pts=t.pts||0;
+    return`<div class="suggested-item ${checked?'checked':''}" style="cursor:pointer" onclick="toggleSuggestedTask('${id}')">
+      <input type="checkbox" ${checked?'checked':''} style="margin-right:8px;cursor:pointer" onchange="event.stopPropagation();toggleSuggestedTask('${id}')">
+      <span style="flex:1">${esc(title)}</span>
+      ${checked?`<span style="color:#059669;font-weight:700;font-size:12px">+${pts}分 ✓</span>`:`<span style="color:#64748b;font-size:12px">+${pts}分</span>`}
+    </div>`;
+  }).join("");
+}
+
+function renderHomeGoals(){
+  console.log("[RENDER] renderHomeGoals start");
+  const list=document.getElementById("homeGoalsList");
+  if(!list)return;
+  const goals=data.goals||{};
+  const goalConfigs=[
+    {key:"study",label:"学习力目标",icon:"📚"},
+    {key:"sport",label:"运动力目标",icon:"⚽"},
+    {key:"selfcontrol",label:"自控力目标",icon:"⏰"},
+    {key:"explore",label:"探索力目标",icon:"🔍"},
+    {key:"practice",label:"实践力目标",icon:"🍳"},
+    {key:"other",label:"其他目标",icon:"⭐"}
+  ];
+  list.innerHTML=goalConfigs.map(cfg=>{
+    const checked=goals[cfg.key+"Checked"]||false;
+    const text=goals[cfg.key+"Text"]||"";
+    return`<div class="home-goal-item ${checked?'checked':''}">
+      <input type="checkbox" data-goal="${cfg.key}" ${checked?'checked':''}>
+      <span class="goal-label">${cfg.label}</span>
+      <input type="text" class="goal-input" data-goal-text="${cfg.key}" value="${esc(text)}" placeholder="填写具体目标...">
+    </div>`;
+  }).join("");
+  // 绑定事件
+  list.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const key=cb.dataset.goal;
+      if(!data.goals)data.goals={};
+      data.goals[key+"Checked"]=cb.checked;
+      saveState();
+      renderHomeGoals();
+    });
+  });
+  list.querySelectorAll('.goal-input').forEach(inp=>{
+    inp.addEventListener('input',()=>{
       const key=inp.dataset.goalText;
       if(!data.goals)data.goals={};
       data.goals[key+"Text"]=inp.value;
@@ -1493,8 +1858,20 @@ document.getElementById("saveReview").addEventListener("click",()=>{
 
 function renderWorks(){
   const tl=document.getElementById("workTimeline");
-  if(!data.works.length){tl.innerHTML=`<div class="empty">还没有作品。暑假结束后，这里会成为孩子自己的成长档案。</div>`;return;}
-  tl.innerHTML=data.works.slice(0,20).map(w=>`<div class="timeline-item">
+  // 收集作品列表
+  let items=[...data.works];
+  // 成员模式下，加入待审核作品
+  let pendingWorks=[];
+  if(memberMode&&memberOwnerId){
+    const subs=getAllSubmissions(memberOwnerId);
+    pendingWorks=subs.filter(s=>s.type==="work"&&s.status==="pending"&&s.work);
+  }
+  if(!items.length&&!pendingWorks.length){
+    tl.innerHTML=`<div class="empty">还没有作品。暑假结束后，这里会成为孩子自己的成长档案。</div>`;
+    return;
+  }
+  // 先展示已批准作品
+  const approvedHtml=items.slice(0,20).map(w=>`<div class="timeline-item">
     <time>${esc(w.date)} · ${esc(w.type||"")}</time>
     <strong>${esc(w.title||"成长作品")}</strong>
     <span class="muted">${esc(w.note||"这是一份值得收藏的成长作品。")}</span>
@@ -1502,6 +1879,19 @@ function renderWorks(){
     ${w.mediaKind==="video"&&w.mediaDataUrl?`<div class="work-media"><video src="${w.mediaDataUrl}" controls playsinline></video></div>`:""}
     ${w.mediaKind==="audio"&&w.mediaDataUrl?`<div class="work-media"><audio src="${w.mediaDataUrl}" controls></audio></div>`:""}
   </div>`).join("");
+  // 再展示待审核作品（仅成员模式）
+  const pendingHtml=pendingWorks.map(sub=>{
+    const w=sub.work;
+    return`<div class="timeline-item" style="opacity:.7;border-color:var(--gold)">
+      <time>${esc(w.date)} · ${esc(w.type||"")} <span class="tag" style="background:#fff1a8;color:#8b6f00">⏳ 待审核</span></time>
+      <strong>${esc(w.title||"成长作品")}</strong>
+      <span class="muted">${esc(w.note||"")}</span>
+      ${w.mediaKind==="image"&&w.mediaDataUrl?`<div class="work-media"><img src="${w.mediaDataUrl}" alt="${esc(w.title)}"></div>`:""}
+      ${w.mediaKind==="video"&&w.mediaDataUrl?`<div class="work-media"><video src="${w.mediaDataUrl}" controls playsinline></video></div>`:""}
+      ${w.mediaKind==="audio"&&w.mediaDataUrl?`<div class="work-media"><audio src="${w.mediaDataUrl}" controls></audio></div>`:""}
+    </div>`;
+  }).join("");
+  tl.innerHTML=approvedHtml+pendingHtml;
 }
 
 document.getElementById("workMedia").addEventListener("change",e=>{
@@ -1529,18 +1919,34 @@ document.getElementById("saveWork").addEventListener("click",async()=>{
     const reader=new FileReader();
     reader.onload=()=>{
       work.mediaDataUrl=reader.result;
-      data.works.unshift(work);saveState();
-      selectedWorkMedia=null;document.getElementById("workMedia").value="";
-      document.getElementById("mediaPreview").classList.remove("show");
-      document.getElementById("mediaPreview").innerHTML="";
-      document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
-      showToast("作品已存入成长档案 🎨");renderAll();
+      // 成员模式：提交到审核队列
+      if(memberMode&&memberOwnerId){
+        submitWorkForReview(work);
+        selectedWorkMedia=null;document.getElementById("workMedia").value="";
+        document.getElementById("mediaPreview").classList.remove("show");
+        document.getElementById("mediaPreview").innerHTML="";
+        document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
+        renderAll();
+      }else{
+        data.works.unshift(work);saveState();
+        selectedWorkMedia=null;document.getElementById("workMedia").value="";
+        document.getElementById("mediaPreview").classList.remove("show");
+        document.getElementById("mediaPreview").innerHTML="";
+        document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
+        showToast("作品已存入成长档案 🎨");renderAll();
+      }
     };
     reader.readAsDataURL(selectedWorkMedia);
   }else{
-    data.works.unshift(work);saveState();
-    document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
-    showToast("作品已存入成长档案 🎨");renderAll();
+    if(memberMode&&memberOwnerId){
+      submitWorkForReview(work);
+      document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
+      renderAll();
+    }else{
+      data.works.unshift(work);saveState();
+      document.getElementById("workTitle").value="";document.getElementById("workNote").value="";
+      showToast("作品已存入成长档案 🎨");renderAll();
+    }
   }
 });
 
@@ -1636,7 +2042,94 @@ function showMakeupDialog(ds){
 
 /* 打卡日历（网格格式） */
 let miniCalDate=new Date();
+// ======== 日期编辑功能 ========
+let currentEditDate = null;
+
+function openDateEditModal(dateStr) {
+  currentEditDate = dateStr;
+  const modal = document.getElementById("dateEditModal");
+  const title = document.getElementById("dateEditTitle");
+  const tasksContainer = document.getElementById("dateEditTasks");
+  
+  // 更新标题
+  title.textContent = `📅 编辑打卡 - ${dateStr}`;
+  
+  // 获取该日期已完成任务
+  const completedIds = new Set(getCompleted(dateStr));
+  
+  // 获取所有活跃任务
+  const tasks = getActiveTasks();
+  
+  // 渲染任务列表
+  tasksContainer.innerHTML = tasks.map(t => {
+    const checked = completedIds.has(t.id) ? "checked" : "";
+    const pts = t.pts || 0;
+    return `
+      <div class="date-edit-task" style="display:flex;align-items:center;padding:10px 12px;margin-bottom:6px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer" 
+           onclick="toggleDateEditTask('${t.id}', this)">
+        <input type="checkbox" id="det_${t.id}" ${checked} style="margin-right:10px;cursor:pointer" onchange="event.stopPropagation()">
+        <label for="det_${t.id}" style="flex:1;cursor:pointer;font-size:14px;color:#334155">
+          <span style="font-weight:600">${esc(t.title)}</span>
+          <span style="color:#64748b;font-size:12px;margin-left:8px">+${pts}分</span>
+        </label>
+      </div>`;
+  }).join("");
+  
+  // 显示模态框
+  modal.style.display = "flex";
+}
+
+function toggleDateEditTask(taskId, element) {
+  const checkbox = element.querySelector('input[type="checkbox"]');
+  checkbox.checked = !checkbox.checked;
+}
+
+function closeDateEditModal() {
+  const modal = document.getElementById("dateEditModal");
+  modal.style.display = "none";
+  currentEditDate = null;
+}
+
+function saveDateEdit() {
+  if (!currentEditDate) return;
+  
+  // 获取所有选中的任务
+  const checkboxes = document.querySelectorAll('#dateEditTasks input[type="checkbox"]');
+  const newCompletedIds = [];
+  checkboxes.forEach(cb => {
+    if (cb.checked) {
+      newCompletedIds.push(cb.id.replace('det_', ''));
+    }
+  });
+  
+  // 更新数据
+  if (!data.completedByDate) data.completedByDate = {};
+  data.completedByDate[currentEditDate] = newCompletedIds;
+  
+  // 保存到历史记录（用于积分统计）
+  if (!data.history) data.history = {};
+  const totalPts = newCompletedIds.reduce((sum, id) => {
+    const task = TASKS.find(t => t.id === id);
+    return sum + (task ? (task.pts || 0) : 0);
+  }, 0);
+  data.history[currentEditDate] = totalPts;
+  
+  // 保存并刷新
+  saveState();
+  closeDateEditModal();
+  renderAll();
+  
+  showToast(`✅ 已更新 ${currentEditDate} 的打卡内容`);
+}
+
+// 点击模态框外部关闭
+ document.addEventListener("click", (e) => {
+  const modal = document.getElementById("dateEditModal");
+  if (e.target === modal) closeDateEditModal();
+});
+
 function renderMiniCalendar(){
+  console.log("[RENDER] renderMiniCalendar start");
   const grid=document.getElementById("miniCalGrid");
   const weekdaysEl=document.getElementById("miniCalWeekdays");
   const label=document.getElementById("miniCalMonthLabel");
@@ -1675,8 +2168,12 @@ function renderMiniCalendar(){
     c.addEventListener("click",()=>{
       const ds=c.dataset.date;
       if(isToday(ds)){
+        // 今天的日期：跳转到任务列表
         switchSection("tasks");
         renderAll();
+      } else {
+        // 过去或未来的日期：打开日期编辑模态框
+        openDateEditModal(ds);
       }
     });
   });
@@ -1717,33 +2214,74 @@ document.querySelectorAll(".checkpoint").forEach(btn=>{
     renderAll();
   });
 });
-document.getElementById("openGateTasks").addEventListener("click",()=>{selectedCategory=activeMapCategory;renderAll();switchSection("tasks");});
-document.getElementById("showAllTasks").addEventListener("click",()=>{selectedCategory="全部";renderAll();switchSection("tasks");});
+const _ogt=document.getElementById("openGateTasks");if(_ogt)_ogt.addEventListener("click",()=>{selectedCategory=activeMapCategory;renderAll();switchSection("tasks");});
+const _sat=document.getElementById("showAllTasks");if(_sat)_sat.addEventListener("click",()=>{selectedCategory="全部";renderAll();switchSection("tasks");});
 
 /* ======== RECOMMENDED & RESET ======== */
-document.getElementById("completeSuggested").addEventListener("click",()=>{
+
+/* 切换单个推荐任务 */
+function toggleSuggestedTask(id){
+  const done=new Set(todayCompleted());  // 返回 data.completedByDate[TODAY_STR] || []
+  if(!data.completedByDate[TODAY_STR]) data.completedByDate[TODAY_STR]=[];
+  
+  if(done.has(id)){
+    // 如果已完成，移除
+    data.completedByDate[TODAY_STR]=data.completedByDate[TODAY_STR].filter(x=>x!==id);
+    const t=getActiveTasks().find(x=>x.id===id);
+    if(t){
+      data.points=Math.max(0,data.points-t.pts);
+      data.history.unshift({type:"undo",date:new Date().toLocaleString("zh-CN"),text:`取消「${t.title}」`,points:-t.pts});
+    }
+    showToast("已取消完成");
+  }else{
+    // 如果未完成，添加
+    data.completedByDate[TODAY_STR].push(id);
+    const t=getActiveTasks().find(x=>x.id===id);
+    if(t){
+      data.points+=t.pts;
+      data.history.unshift({type:"earn",date:new Date().toLocaleString("zh-CN"),text:`完成「${t.title}」`,points:t.pts});
+      celebrate();
+      showToast("任务完成！");
+    }
+  }
+  saveState();
+  renderAll();
+}
+
+function handleCompleteSuggested(){
+  console.log('[DEBUG] handleCompleteSuggested called');
   const recommended=["read-20","sport-30","screen"];
-  const done=new Set(todayCompleted());
-  let added=0;
+  const done=new Set(todayCompleted());  // 返回 data.completedByDate[TODAY_STR] || []
+  if(!data.completedByDate[TODAY_STR]) data.completedByDate[TODAY_STR]=[];
+  
+  let addedTasks=0;
+  let addedPoints=0;
   recommended.forEach(id=>{
     if(!done.has(id)){
       const t=getActiveTasks().find(x=>x.id===id);
-      if(t){done.add(id);data.points+=t.pts;added++;}
+      if(t){
+        data.completedByDate[TODAY_STR].push(id);  // 使用正确的数据结构
+        data.points+=t.pts;
+        addedTasks++;
+        addedPoints+=t.pts;
+      }
     }
   });
-  if(added>0){
-    data.history.unshift({type:"earn",date:new Date().toLocaleString("zh-CN"),text:"一键完成推荐三项",points:added});
+  if(addedTasks>0){
+    data.history.unshift({type:"earn",date:new Date().toLocaleString("zh-CN"),text:"一键完成推荐三项",points:addedPoints});
     saveState();
     celebrate();
-    showToast("推荐三项已存入成长账户。");
+    showToast("推荐三项已存入成长账户，获得"+addedPoints+"分！");
   }else{
-    showToast("推荐任务今天已经完成了！");
+    showToast("推荐三项今天已完成啦！");
   }
-  data.completedByDate[TODAY_STR]=[...done];
-  saveState();renderAll();
-});
+  renderAll();
+}
 
-document.getElementById("resetToday").addEventListener("click",()=>{
+const _cs=document.getElementById("completeSuggested");if(_cs){_cs.addEventListener("click",handleCompleteSuggested);console.log('[DEBUG] completeSuggested event bound');}
+const _homeCS=document.getElementById("homeCompleteSuggested");if(_homeCS){_homeCS.addEventListener("click",handleCompleteSuggested);console.log('[DEBUG] homeCompleteSuggested event bound');}
+
+const _rt=document.getElementById("resetToday");if(_rt)_rt.addEventListener("click",()=>{
   const doneIds=todayCompleted();
   const score=getActiveTasks().filter(t=>doneIds.includes(t.id)).reduce((s,t)=>s+t.pts,0);
   data.points=Math.max(0,data.points-score);
@@ -1968,7 +2506,7 @@ function openBackupModal(){
             const d=parsed.data||parsed;
             data={...freshState(),...d};saveState();renderAll();
             showToast("数据恢复成功，请刷新页面 🎉");
-          }catch{showToast("文件格式错误，请确认是成长银行备份文件");}
+          }catch(err){showToast("文件格式错误，请确认是成长银行备份文件");}
         };r.readAsText(f);
       };fi.click();
     };
@@ -2010,6 +2548,8 @@ function renderParent(){
     <span class="pts" style="color:#9b503e">-${m.cost}</span>
   </div>`).join("");}
   document.getElementById("totalStat").textContent=calcTotalPoints();
+  // 渲染分享面板
+  renderSharePanel();
 }
 
 document.getElementById("saveName").addEventListener("click",()=>{
@@ -2042,14 +2582,7 @@ document.getElementById("resetData").addEventListener("click",()=>{
   renderAll();showToast("数据已重置");
 });
 
-/* ======== STARTUP ======== */
-window.addEventListener("load",()=>{
-  renderAll();
-  setupChildProfile();
-  setupHistoryPopup();
-  setupAddChild();
-});
-if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js?v=11").catch(()=>{});}
+/* ======== STARTUP (see end of file for final init) ======== */
 
 /* ======== 宝贝信息弹窗 ======== */
 function setupChildProfile(){
@@ -2318,6 +2851,733 @@ function renderHistoryPopup(){
     </div>
   `).join("");
 }
+
+/* ==========================================
+   🔐 登录 / 注册 / 账号系统
+   ========================================== */
+
+// 当前登录用户（必须在其他函数之前声明）
+var currentUser=null; // {username, displayName, ownerId}
+
+// 账号存储 (localStorage)
+function getAllAccounts(){try{return JSON.parse(localStorage.getItem("sgb_accounts")||"{}");}catch(e){return{};}}
+function saveAllAccounts(accts){localStorage.setItem("sgb_accounts",JSON.stringify(accts));}
+
+// 简单哈希（防窥，不算安全加密，仅本地存储防一般窥探）
+async function simpleHash(s){
+  if(!crypto.subtle||!crypto.subtle.digest){
+    // 不支持 crypto.subtle（非 HTTPS 或 file://），降级为普通哈希
+    let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
+    return Math.abs(h).toString(16).padStart(8,"0")+String(s.length).padStart(4,"0");
+  }
+  const buf=new TextEncoder().encode(s+"sgb_salt_2024");
+  const h=await crypto.subtle.digest("SHA-256",buf);
+  return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,"0")).join("").slice(0,40);
+}
+
+// 读取当前会话
+function loadUserSession(){
+  try{
+    const s=JSON.parse(sessionStorage.getItem("sgb_session")||"null");
+    return s;
+  }catch(e){return null;}
+}
+function saveUserSession(u){
+  if(u)sessionStorage.setItem("sgb_session",JSON.stringify(u));
+  else sessionStorage.removeItem("sgb_session");
+}
+
+// 成员模式状态
+let memberMode=false; // true=通过分享链接进入的成员
+let memberOwnerId=null; // 分享者的ownerId
+let memberToken=null; // 分享令牌
+
+// 检查URL中的分享参数
+function checkShareLink(){
+  const params=new URLSearchParams(window.location.search);
+  const token=params.get("share");
+  if(token){
+    try{
+      const decoded=JSON.parse(safeDecode(token));
+      if(decoded.ownerId&&decoded.perm){
+        memberMode=true;
+        memberOwnerId=decoded.ownerId;
+        memberToken=decoded.token||"";
+        return decoded;
+      }
+    }catch(e){}
+  }
+  return null;
+}
+
+// 初始化账号系统
+function initAuth(){
+  const shareInfo=checkShareLink();
+  const saved=loadUserSession();
+  if(saved){
+    currentUser=saved;
+    // 检查账号是否存在
+    const accts=getAllAccounts();
+    if(!accts[saved.username]){
+      currentUser=null;
+      saveUserSession(null);
+    }
+  }
+  renderAuthUI();
+  if(memberMode&&shareInfo){
+    // 设置成员模式
+    const ownerName=shareInfo.displayName||"分享者";
+    const el=document.getElementById("memberOwnerName");
+    if(el)el.textContent=ownerName;
+    // 显示成员提交栏
+    const bar=document.getElementById("memberSubmitBar");
+    if(bar)bar.style.display="flex";
+    // 替换任务副标题
+    const sub=document.getElementById("taskSubtitle");
+    if(sub)sub.textContent=`以成员身份参与 ${ownerName} 的成长记录。提交后需等待审核。`;
+    // 禁用一键推荐/清空按钮
+    const cs=document.getElementById("completeSuggested");
+    const rt=document.getElementById("resetToday");
+    if(cs)cs.style.display="none";
+    if(rt)rt.style.display="none";
+    // 加载分享者的数据
+    loadOwnerData(memberOwnerId);
+  }
+  // 更新分享者视角
+  updateOwnerPendingHint();
+}
+
+// 加载分享者数据到本地
+function loadOwnerData(ownerId){
+  try{
+    const ownerData=JSON.parse(localStorage.getItem("sgb_data_"+ownerId)||"null");
+    if(ownerData){
+      // 合并数据
+      data={...freshState(),...ownerData};
+      // 覆盖currentUser相关
+      data.childName=ownerData.childName||data.childName||"宝贝";
+      saveState();
+      renderAll();
+    }
+  }catch(e){}
+}
+
+// 更新分享者待审核提示
+function updateOwnerPendingHint(){
+  if(!currentUser)return;
+  const ownerId=currentUser.ownerId||currentUser.username;
+  const pending=getPendingSubmissions(ownerId);
+  const hint=document.getElementById("ownerPendingHint");
+  const count=document.getElementById("ownerPendingCount");
+  if(hint&&count){
+    if(pending.length>0){
+      hint.style.display="block";
+      count.textContent=pending.length;
+    }else{
+      hint.style.display="none";
+    }
+  }
+}
+
+// 渲染登录/用户UI
+function renderAuthUI(){
+  const outDiv=document.getElementById("authAreaLoggedOut");
+  const inDiv=document.getElementById("authAreaLoggedIn");
+  const nameEl=document.getElementById("userDisplayName");
+  const shareBanner=document.getElementById("shareBanner");
+  if(!outDiv||!inDiv)return;
+  if(currentUser){
+    outDiv.style.display="none";
+    inDiv.style.display="flex";
+    if(nameEl)nameEl.textContent=currentUser.displayName||currentUser.username;
+    if(shareBanner)shareBanner.style.display="flex";
+  }else{
+    outDiv.style.display="flex";
+    inDiv.style.display="none";
+    if(shareBanner)shareBanner.style.display="none";
+  }
+}
+
+// 打开登录弹窗
+function openAuthModal(mode){
+  const overlay=document.getElementById("authOverlay");
+  if(!overlay)return;
+  overlay.style.display="flex";
+  setAuthMode(mode||"login");
+}
+
+// 关闭登录弹窗
+function closeAuthModal(){
+  const overlay=document.getElementById("authOverlay");
+  if(overlay)overlay.style.display="none";
+  const err=document.getElementById("authError");
+  if(err){err.classList.remove("show");err.textContent="";}
+  document.getElementById("authUsername").value="";
+  document.getElementById("authPassword").value="";
+  document.getElementById("authDisplayName").value="";
+}
+
+// 设置登录/注册模式
+function setAuthMode(mode){
+  const tabLogin=document.getElementById("tabLogin");
+  const tabReg=document.getElementById("tabReg");
+  const title=document.getElementById("authTitle");
+  const subtitle=document.getElementById("authSubtitle");
+  const nameField=document.getElementById("authNameField");
+  const submitBtn=document.getElementById("authSubmitBtn");
+  if(!tabLogin)return;
+  if(mode==="login"){
+    tabLogin.classList.add("active");tabReg.classList.remove("active");
+    if(title)title.textContent="登录账号";
+    if(subtitle)subtitle.textContent="登录后可以分享给家庭成员一起参与成长记录";
+    if(nameField)nameField.style.display="none";
+    if(submitBtn)submitBtn.textContent="登录";
+  }else{
+    tabReg.classList.add("active");tabLogin.classList.remove("active");
+    if(title)title.textContent="注册账号";
+    if(subtitle)subtitle.textContent="注册后可以创建自己的成长银行并邀请家庭成员";
+    if(nameField)nameField.style.display="grid";
+    if(submitBtn)submitBtn.textContent="注册";
+  }
+}
+
+// 显示错误
+function showAuthError(msg){
+  const err=document.getElementById("authError");
+  if(err){err.textContent=msg;err.classList.add("show");}
+}
+
+// 统一提交按钮动作
+window.authSubmitAction=async function(){
+  console.log("authSubmitAction 被点击");
+  try{
+    const tabL=document.getElementById("tabLogin");
+    if(tabL&&tabL.classList.contains("active")){
+      await doLogin();
+    }else{
+      await doRegister();
+    }
+  }catch(e){
+    console.error("authSubmitAction 出错:",e);
+    showAuthError("提交出错："+e.message);
+  }
+};
+
+// 注册
+async function doRegister(){
+  try{
+  const username=document.getElementById("authUsername").value.trim();
+  const password=document.getElementById("authPassword").value;
+  const displayName=document.getElementById("authDisplayName").value.trim()||username;
+  if(username.length<3){showAuthError("用户名至少3个字符");return;}
+  if(password.length<6){showAuthError("密码至少6位");return;}
+  const accts=getAllAccounts();
+  if(accts[username]){showAuthError("用户名已存在，请直接登录");return;}
+  const hash=await simpleHash(password);
+  const ownerId="owner_"+username+"_"+Date.now();
+  accts[username]={passwordHash:hash,displayName,ownerId,createdAt:new Date().toISOString()};
+  saveAllAccounts(accts);
+  // 保存该用户自己的数据副本（初始化）
+  const userData={...freshState()};
+  userData.childName=displayName;
+  localStorage.setItem("sgb_data_"+ownerId,JSON.stringify(userData));
+  currentUser={username,displayName,ownerId};
+  saveUserSession(currentUser);
+  // 将当前data迁移到用户数据
+  data.ownerId=ownerId;
+  data.username=username;
+  saveState();
+  closeAuthModal();
+  renderAuthUI();
+  showToast(`欢迎 ${displayName}！账号创建成功 🎉`);
+  }catch(e){showAuthError("注册出错："+(e.message||"未知错误"));}
+}
+
+// 登录
+async function doLogin(){
+  try{
+  const username=document.getElementById("authUsername").value.trim();
+  const password=document.getElementById("authPassword").value;
+  if(!username||!password){showAuthError("请输入用户名和密码");return;}
+  const accts=getAllAccounts();
+  const acct=accts[username];
+  if(!acct){showAuthError("账号不存在，请先注册");return;}
+  const hash=await simpleHash(password);
+  if(hash!==acct.passwordHash){showAuthError("密码错误");return;}
+  currentUser={username,displayName:acct.displayName,ownerId:acct.ownerId};
+  saveUserSession(currentUser);
+  // 加载该用户的数据
+  try{
+    const userData=JSON.parse(localStorage.getItem("sgb_data_"+acct.ownerId)||"null");
+    if(userData){data={...freshState(),...userData,ownerId:acct.ownerId,username};saveState();}
+  }catch(e){}
+  closeAuthModal();
+  renderAuthUI();
+  renderAll();
+  showToast(`欢迎回来，${acct.displayName}！`);
+  updateOwnerPendingHint();
+  try{renderSharePanel();}catch(e){}
+  }catch(e){showAuthError("登录出错："+(e.message||"未知错误"));}
+}
+
+// 退出登录
+function doLogout(){
+  if(!confirm("确定退出当前账号？本地数据会保留。"))return;
+  currentUser=null;
+  saveUserSession(null);
+  // 清理成员模式
+  memberMode=false;memberOwnerId=null;memberToken=null;
+  // 重置URL参数
+  window.history.replaceState({},"",window.location.pathname);
+  // 恢复默认数据
+  const saved=loadState();
+  data=saved;
+  renderAuthUI();
+  renderAll();
+  // 隐藏成员提交栏
+  const bar=document.getElementById("memberSubmitBar");
+  if(bar)bar.style.display="none";
+  const sub=document.getElementById("taskSubtitle");
+  if(sub)sub.textContent="五大能量均衡存入，重点方向可以多加一点。";
+  const cs=document.getElementById("completeSuggested");
+  const rt=document.getElementById("resetToday");
+  if(cs)cs.style.display="";
+  if(rt)rt.style.display="";
+  showToast("已退出登录");
+}
+
+// 绑定登录相关事件
+function setupAuthEvents(){
+  const openBtn=document.getElementById("openLoginBtn");
+  const closeBtn=document.getElementById("closeAuth");
+  const tabLogin=document.getElementById("tabLogin");
+  const tabReg=document.getElementById("tabReg");
+  const submitBtn=document.getElementById("authSubmitBtn");
+  const guestBtn=document.getElementById("guestContinueBtn");
+  const logoutBtn=document.getElementById("logoutBtn");
+  const overlay=document.getElementById("authOverlay");
+  if(openBtn)openBtn.addEventListener("click",()=>openAuthModal("login"));
+  if(closeBtn)closeBtn.addEventListener("click",closeAuthModal);
+  if(tabLogin)tabLogin.addEventListener("click",()=>setAuthMode("login"));
+  if(tabReg)tabReg.addEventListener("click",()=>setAuthMode("register"));
+  if(submitBtn)submitBtn.addEventListener("click",()=>{
+    const tabL=document.getElementById("tabLogin");
+    if(tabL&&tabL.classList.contains("active"))doLogin();
+    else doRegister();
+  });
+  if(guestBtn)guestBtn.addEventListener("click",closeAuthModal);
+  if(logoutBtn)logoutBtn.addEventListener("click",doLogout);
+  if(overlay)overlay.addEventListener("click",e=>{if(e.target===overlay)closeAuthModal();});
+  // 回车登录
+  document.getElementById("authPassword").addEventListener("keydown",e=>{if(e.key==="Enter")submitBtn&&submitBtn.click();});
+  document.getElementById("authUsername").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("authPassword").focus();});
+}
+
+/* ==========================================
+   🔗 分享系统
+   ========================================== */
+
+// 安全 base64 编码（支持中文）
+function safeEncode(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+// 安全 base64 解码（支持中文）
+function safeDecode(str){
+  return decodeURIComponent(escape(atob(str)));
+}
+
+// 获取当前用户的ownerId
+function getMyOwnerId(){
+  if(currentUser&&currentUser.ownerId)return currentUser.ownerId;
+  // 尝试从data获取
+  if(data.ownerId)return data.ownerId;
+  // 生成一个临时ID
+  return"local_"+(localStorage.getItem("sgb_local_id")||(function(){
+    const id="local_"+Date.now();localStorage.setItem("sgb_local_id",id);return id;
+  })());
+}
+
+// 获取所有成员提交
+function getAllSubmissions(ownerId){
+  try{return JSON.parse(localStorage.getItem("sgb_submissions_"+ownerId)||"[]");}
+  catch(e){return[];}
+}
+function saveAllSubmissions(ownerId,subs){
+  console.log("[存储提交] key=sgb_submissions_"+ownerId, " count="+subs.length);
+  localStorage.setItem("sgb_submissions_"+ownerId,JSON.stringify(subs));
+}
+
+// 获取待审提交
+function getPendingSubmissions(ownerId){
+  return getAllSubmissions(ownerId).filter(s=>s.status==="pending");
+}
+
+// 生成分享链接
+function generateShareLink(){
+  const ownerId=getMyOwnerId();
+  const perm=document.getElementById("sharePermSelect")?document.getElementById("sharePermSelect").value:"edit_submit";
+  const displayName=currentUser?currentUser.displayName:"分享者";
+  const token="t_"+Date.now()+"_"+Math.random().toString(36).slice(2,8);
+  const payload={ownerId,perm,token,displayName,createdAt:new Date().toISOString()};
+  const encoded=safeEncode(JSON.stringify(payload));
+  const url=window.location.origin+window.location.pathname+"?share="+encoded;
+  const input=document.getElementById("shareLinkInput");
+  if(input){input.value=url;input.readOnly=true;}
+  const hint=document.getElementById("shareLinkHint");
+  if(hint)hint.style.display="block";
+  // 自动复制
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>{
+      const btn=document.getElementById("genShareLinkBtn");
+      if(btn){
+        const orig=btn.textContent;
+        btn.textContent="已复制！";btn.style.background="var(--gold)";
+        setTimeout(()=>{btn.textContent=orig;btn.style.background="";},2000);
+      }
+    });
+  }
+  showToast("分享链接已生成，可复制发送给家庭成员 📋");
+  // 保存成员信息
+  saveShareMembers(ownerId,payload);
+}
+
+// 保存已分享的成员信息
+function saveShareMembers(ownerId,payload){
+  try{
+    const members=JSON.parse(localStorage.getItem("sgb_members_"+ownerId)||"[]");
+    // 避免重复
+    if(!members.find(m=>m.token===payload.token)){
+      members.push({name:"成员"+payload.token.slice(-4),token:payload.token,perm:payload.perm,joinedAt:new Date().toISOString(),status:"active"});
+      localStorage.setItem("sgb_members_"+ownerId,JSON.stringify(members));
+    }
+  }catch{}
+}
+
+// 渲染分享面板
+function renderSharePanel(){
+  const ownerId=getMyOwnerId();
+  const pendingList=document.getElementById("sharePendingList");
+  const badge=document.getElementById("pendingBadge");
+  if(pendingList){
+    const pending=getPendingSubmissions(ownerId);
+    if(badge){
+      if(pending.length>0){badge.style.display="inline-flex";badge.textContent=pending.length;}
+      else{badge.style.display="none";}
+    }
+    if(pending.length===0){
+      pendingList.innerHTML=`<div class="share-empty"><div class="share-empty-icon">📭</div><div>暂无待审核提交</div><div style="font-size:12px;margin-top:6px">生成分享链接，让家庭成员参与成长记录</div></div>`;
+    }else{
+      const allTasks=getActiveTasks();
+      pendingList.innerHTML=pending.map(sub=>{
+        if(sub.type==="work"&&sub.work){
+          // 作品提交
+          const w=sub.work;
+          return`
+          <div class="share-pending-item">
+            <div class="sp-icon">🎨</div>
+            <div class="sp-body">
+              <div class="sp-name">${esc(sub.memberName||"成员")}</div>
+              <div class="sp-meta">作品 · 提交于 ${sub.submittedAt?new Date(sub.submittedAt).toLocaleString("zh-CN"):""}</div>
+              <div class="sp-detail"><strong>${esc(w.title||"未命名")}</strong> · ${esc(w.type||"")}</div>
+              ${w.note?`<div class="sp-detail">${esc(w.note)}</div>`:""}
+              ${w.mediaKind==="image"&&w.mediaDataUrl?`<div class="sp-thumb" onclick="viewWorkDetail('${sub.id}')" style="cursor:pointer" title="点击查看完整作品"><img src="${w.mediaDataUrl}" alt="${esc(w.title)}"></div>`:w.mediaKind==="video"&&w.mediaDataUrl?`<div class="sp-thumb sp-thumb-video" onclick="viewWorkDetail('${sub.id}')" style="cursor:pointer" title="点击查看完整作品">▶ 视频</div>`:w.mediaKind==="audio"&&w.mediaDataUrl?`<div class="sp-thumb sp-thumb-audio" onclick="viewWorkDetail('${sub.id}')" style="cursor:pointer" title="点击查看完整作品">♫ 音频</div>`:""}
+              <div class="sp-actions">
+                <button class="share-approve-btn" onclick="approveSubmission('${sub.id}')">✅ 批准</button>
+                <button class="share-reject-btn" onclick="rejectSubmission('${sub.id}')">✕ 拒绝</button>
+              </div>
+            </div>
+          </div>
+        `;
+        }
+        const titles=(sub.completedTaskTitles&&sub.completedTaskTitles.length)
+          ?sub.completedTaskTitles
+          :(sub.completedTasks||[]).map(tid=>{
+              const t=allTasks.find(x=>x.id===tid);
+              return t?t.title:tid;
+            });
+        return`
+        <div class="share-pending-item">
+          <div class="sp-icon">${(sub.memberName||"成员").slice(0,1)}</div>
+          <div class="sp-body">
+            <div class="sp-name">${esc(sub.memberName||"成员")}</div>
+            <div class="sp-meta">提交于 ${sub.submittedAt?new Date(sub.submittedAt).toLocaleString("zh-CN"):""}</div>
+            ${sub.note?`<div class="sp-detail">${esc(sub.note)}</div>`:""}
+            ${titles&&titles.length?`<div class="sp-detail">完成任务：${titles.map(t=>`<span style="margin-right:6px;display:inline-block;padding:2px 7px;border-radius:999px;background:#e3f4d9;font-size:12px">${esc(t)}</span>`).join("")}</div>`:""}
+            <div class="sp-actions">
+              <button class="share-approve-btn" onclick="approveSubmission('${sub.id}')">✅ 批准</button>
+              <button class="share-reject-btn" onclick="rejectSubmission('${sub.id}')">✕ 拒绝</button>
+            </div>
+          </div>
+        </div>
+      `;}).join("");
+    }
+  }
+  // 渲染已加入成员
+  const memberList=document.getElementById("shareMemberList");
+  if(memberList){
+    try{
+      const members=JSON.parse(localStorage.getItem("sgb_members_"+ownerId)||"[]");
+      if(members.length===0){
+        memberList.innerHTML=`<div class="share-empty"><div style="font-size:12px;margin-top:6px">暂无已加入的成员，生成分享链接即可邀请。</div></div>`;
+      }else{
+        memberList.innerHTML=members.map(m=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;background:rgba(255,255,255,.7);border:1px solid rgba(47,148,127,.12);margin-bottom:6px">
+            <div>
+              <span style="font-weight:800;font-size:14px">${esc(m.name)}</span>
+              <span class="share-member-chip" style="margin-left:8px">${m.perm==="edit_submit"?"可编辑提交":"仅查看"}</span>
+            </div>
+            <span style="font-size:11px;color:var(--muted)">加入于 ${m.joinedAt?new Date(m.joinedAt).toLocaleDateString("zh-CN"):""}</span>
+          </div>
+        `).join("");
+      }
+    }catch{memberList.innerHTML="";}
+  }
+}
+
+// 点击查看作品完整内容（弹窗）
+window.viewWorkDetail=function(subId){
+  const ownerId=getMyOwnerId();
+  const subs=getAllSubmissions(ownerId);
+  const sub=subs.find(s=>s.id===subId);
+  if(!sub||!sub.work){showToast("作品数据不存在");return;}
+  const w=sub.work;
+  const ov=document.createElement("div");
+  ov.className="pin-overlay";
+  ov.style.cssText="z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px";
+  ov.innerHTML=`
+    <div style="background:#fff;border-radius:16px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:24px;box-shadow:0 8px 40px rgba(0,0,0,.25);position:relative">
+      <button style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:26px;cursor:pointer;color:var(--muted);line-height:1" onclick="this.closest('.pin-overlay').remove()">×</button>
+      <div style="margin-bottom:12px">
+        <strong style="font-size:17px">${esc(w.title||"成长作品")}</strong>
+        <span style="font-size:12px;color:var(--muted);margin-left:8px">${esc(w.type||"")}</span>
+      </div>
+      ${w.note?`<p style="color:#444;font-size:14px;line-height:1.7;margin:0 0 14px">${esc(w.note)}</p>`:""}
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${esc(w.date||"")} · 提交者：${esc(sub.memberName||"成员")}</div>
+      ${w.mediaKind==="image"&&w.mediaDataUrl?`<div style="border-radius:10px;overflow:hidden;background:#f5f5f0"><img src="${w.mediaDataUrl}" style="width:100%;display:block" alt="${esc(w.title)}"></div>`:""}
+      ${w.mediaKind==="video"&&w.mediaDataUrl?`<div style="border-radius:10px;overflow:hidden;background:#000"><video src="${w.mediaDataUrl}" controls playsinline style="width:100%;display:block;max-height:500px"></video></div>`:""}
+      ${w.mediaKind==="audio"&&w.mediaDataUrl?`<div style="border-radius:10px;overflow:hidden;background:#f5f5f0;padding:30px 16px"><audio src="${w.mediaDataUrl}" controls style="width:100%"></audio></div>`:""}
+      <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+        <button class="share-reject-btn" onclick="this.closest('.pin-overlay').remove();rejectSubmission('${sub.id}')">✕ 拒绝</button>
+        <button class="share-approve-btn" onclick="this.closest('.pin-overlay').remove();approveSubmission('${sub.id}')">✅ 批准</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.remove();});
+};
+
+// 批准成员提交
+window.approveSubmission=function(subId){
+  const ownerId=getMyOwnerId();
+  const subs=getAllSubmissions(ownerId);
+  const sub=subs.find(s=>s.id===subId);
+  if(!sub){showToast("提交不存在");return;}
+  
+  if(sub.type==="work"&&sub.work){
+    // 作品审核：合并到 data.works
+    data.works.unshift({...sub.work});
+    data.history.unshift({type:"earn",date:new Date().toLocaleString("zh-CN"),text:`成员「${sub.memberName||""}」提交作品「${sub.work.title||"未命名"}」审核通过`,points:0});
+    saveState();
+    renderAll();
+  }else{
+    // 任务审核：将成员完成的任务合并到主数据
+    if(sub.completedTasks&&sub.completedTasks.length){
+      const today=data.completedByDate[TODAY_STR]||[];
+      const newTasks=sub.completedTasks.filter(tid=>!today.includes(tid));
+      newTasks.forEach(tid=>{
+        const t=getActiveTasks().find(x=>x.id===tid);
+        if(t){data.points+=t.pts;}
+      });
+      data.completedByDate[TODAY_STR]=[...today,...newTasks];
+      if(sub.note){
+        data.history.unshift({type:"earn",date:new Date().toLocaleString("zh-CN"),text:`成员「${sub.memberName||""}」提交审核通过`,points:sub.points||0});
+      }
+      saveState();
+      renderAll();
+    }
+  }
+  sub.status="approved";
+  sub.reviewedAt=new Date().toISOString();
+  saveAllSubmissions(ownerId,subs);
+  renderSharePanel();
+  showToast(`已批准「${sub.memberName||"成员"}」的提交 ✅`);
+};
+
+// 拒绝成员提交
+window.rejectSubmission=function(subId){
+  if(!confirm("确定要拒绝此提交？成员的任务将不会被记录。"))return;
+  const ownerId=getMyOwnerId();
+  const subs=getAllSubmissions(ownerId);
+  const sub=subs.find(s=>s.id===subId);
+  if(!sub){showToast("提交不存在");return;}
+  sub.status="rejected";
+  sub.reviewedAt=new Date().toISOString();
+  saveAllSubmissions(ownerId,subs);
+  renderSharePanel();
+  showToast(`已拒绝「${sub.memberName||"成员"}」的提交`);
+};
+
+/* ==========================================
+   📝 成员提交审核
+   ========================================== */
+
+// 成员提交作品审核
+function submitWorkForReview(work){
+  if(!memberMode||!memberOwnerId)return;
+  let memberName=sessionStorage.getItem("sgb_member_name")||"";
+  if(!memberName){
+    memberName=prompt("请输入你的名字（如：小明）：")||"匿名成员";
+    sessionStorage.setItem("sgb_member_name",memberName);
+  }
+  const subId="sub_"+Date.now()+"_"+Math.random().toString(36).slice(2,6);
+  const submission={
+    id:subId,
+    memberName,
+    memberToken:memberToken||"",
+    ownerId:memberOwnerId,
+    type:"work",
+    work:work,
+    submittedAt:new Date().toISOString(),
+    status:"pending"
+  };
+  const subs=getAllSubmissions(memberOwnerId);
+  subs.push(submission);
+  saveAllSubmissions(memberOwnerId,subs);
+  showToast(`作品已提交给分享者审核 📬`);
+}
+
+// 成员提交审核
+async function submitForReview(){
+  console.log("[提交审核] memberMode=", memberMode, " memberOwnerId=", memberOwnerId);
+  if(!memberMode||!memberOwnerId){
+    showToast("只有成员模式下才能提交审核");return;
+  }
+  const done=todayCompleted();
+  console.log("[提交审核] 完成任务数=", done.length, " tasks=", done);
+  const doneTasks=done.map(id=>getActiveTasks().find(t=>t.id===id)).filter(Boolean);
+  const totalPts=doneTasks.reduce((s,t)=>s+t.pts,0);
+  // 获取成员名称
+  let memberName=sessionStorage.getItem("sgb_member_name")||"";
+  if(!memberName){
+    memberName=prompt("请输入你的名字（如：小明）：")||"匿名成员";
+    sessionStorage.setItem("sgb_member_name",memberName);
+  }
+  const note=prompt("有什么想对分享者说的？（可选）")||"";
+  const subId="sub_"+Date.now()+"_"+Math.random().toString(36).slice(2,6);
+  const submission={
+    id:subId,
+    memberName,
+    memberToken:memberToken||"",
+    ownerId:memberOwnerId,
+    completedTasks:done,
+    completedTaskTitles:doneTasks.map(t=>t.title),
+    points:totalPts,
+    note,
+    submittedAt:new Date().toISOString(),
+    status:"pending"
+  };
+  const subs=getAllSubmissions(memberOwnerId);
+  // 如果有同成员的待审提交，合并或替换
+  const existIdx=subs.findIndex(s=>s.memberToken===memberToken&&s.status==="pending");
+  if(existIdx>=0){
+    if(!confirm("你已有一份待审核的提交，要替换吗？"))return;
+    subs.splice(existIdx,1);
+  }
+  subs.push(submission);
+  saveAllSubmissions(memberOwnerId,subs);
+  showToast(`已提交给分享者审核！共 ${done.length} 项任务，${totalPts} 分 📬`);
+}
+
+// 成员模式下保存（提交到分享者的数据）
+async function memberSaveState(){
+  if(!memberMode||!memberOwnerId)return;
+  // 成员数据保存在本地（待提交状态）
+  localStorage.setItem("sgb_member_data_"+memberOwnerId+"_"+(memberToken||"default"),JSON.stringify(data));
+}
+
+// 绑定分享相关事件
+function setupShareEvents(){
+  const genBtn=document.getElementById("genShareLinkBtn");
+  const submitBtn=document.getElementById("submitReviewBtn");
+  if(genBtn)genBtn.addEventListener("click",generateShareLink);
+  if(submitBtn)submitBtn.addEventListener("click",submitForReview);
+}
+
+// 覆写 saveState 以支持多用户
+const _origSaveState=saveState;
+saveState=function(){
+  const ok=_origSaveState();
+  // 同时保存到用户专属空间
+  const oid=getMyOwnerId();
+  if(oid){
+    try{localStorage.setItem("sgb_data_"+oid,JSON.stringify(data));}catch{}
+  }
+  // 成员模式同步到分享者
+  if(memberMode&&memberOwnerId&&memberToken){
+    localStorage.setItem("sgb_member_data_"+memberOwnerId+"_"+memberToken,JSON.stringify(data));
+  }
+  return ok;
+};
+
+// 覆写 renderAll 以更新分享面板
+const _origRenderAll=renderAll;
+renderAll=function(){
+  _origRenderAll();
+  if(currentUser)renderSharePanel();
+  updateOwnerPendingHint();
+};
+
+// 全局错误捕获
+window.onerror=function(msg,url,line,col,err){
+  console.error("全局JS错误:",msg,err);
+  const d=document.getElementById("authError");
+  if(d&&d.classList.contains("show")){d.textContent+=" [ERR:"+msg+"]";}
+};
+window.addEventListener("unhandledrejection",function(e){
+  console.error("未处理的Promise错误:",e.reason);
+  showAuthError("异步错误："+(e.reason&&e.reason.message?e.reason.message:e.reason));
+});
+
+// 初始化
+window.addEventListener("DOMContentLoaded",()=>{
+  console.log("[INIT] DOMContentLoaded start");
+  try{
+    setupAuthEvents();
+    console.log("[INIT] setupAuthEvents done");
+    setupShareEvents();
+    console.log("[INIT] setupShareEvents done");
+    initAuth();
+    console.log("[INIT] initAuth done");
+    setupChildProfile();
+    console.log("[INIT] setupChildProfile done");
+    setupHistoryPopup();
+    console.log("[INIT] setupHistoryPopup done");
+    setupAddChild();
+    console.log("[INIT] setupAddChild done");
+  }catch(e){console.error("init error:",e);}
+});
+window.addEventListener("load",()=>{
+  console.log("[INIT] load event fired");
+  setupShareEvents();
+  console.log("[INIT] calling renderAll");
+  renderAll();
+  console.log("[INIT] renderAll done");
+});
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js?v=13").catch(()=>{});
+}
 </script>
+
+<!-- 日期编辑模态框 -->
+<div id="dateEditModal" class="modal-overlay" style="display:none;z-index:1001">
+  <div class="modal-box" style="max-width:480px">
+    <h3 id="dateEditTitle" style="margin:0 0 16px 0;font-size:18px;font-weight:700;color:#1e293b">📅 编辑打卡</h3>
+    <div id="dateEditTasks" style="max-height:50vh;overflow-y:auto;margin-bottom:16px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-sm" onclick="closeDateEditModal()" style="background:#94a3b8;color:#fff">取消</button>
+      <button class="btn btn-sm btn-primary" onclick="saveDateEdit()">保存</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

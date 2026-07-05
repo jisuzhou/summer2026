@@ -1,0 +1,45 @@
+*** Begin Patch
+*** Update File: C:\Users\86187\.qclaw\workspace\growth-bank-site\deploy\index.html
+*** Old:
+function renderSuggestedTasks(){
+  console.log("[RENDER] renderSuggestedTasks start");
+  const container=document.getElementById("suggestedTasks");
+  if(!container)return;
+  const recommended=["read-20","sport-30","screen"];
+  const done=todayCompleted();
+  const tasks=getActiveTasks();
+  container.innerHTML=recommended.map(id=>{
+    const t=tasks.find(x=>x.id===id);
+    if(!t)return"";
+    const checked=done.includes(id);
+    return`<div class="suggested-item ${checked?'checked':''}">
+      <span class="suggested-icon">${t.icon}</span>
+      <span>${esc(t.title)}</span>
+      ${checked?'<span style="margin-left:auto;color:#059669;font-weight:700">✓ 已完成</span>':'<span style="margin-left:auto;color:#64748b;font-size:12px">+${t.pts}分</span>'}
+    </div>`;
+  }).join("");
+}
+*** New:
+function renderSuggestedTasks(){
+  console.log("[RENDER] renderSuggestedTasks start");
+  const container=document.getElementById("suggestedTasks");
+  if(!container)return;
+  const recommended=["read-20","sport-30","screen"];
+  const done=todayCompleted();
+  const tasks=getActiveTasks();
+  console.log("[DEBUG] tasks:", tasks.length, tasks);
+  container.innerHTML=recommended.map(id=>{
+    const t=tasks.find(x=>x.id===id);
+    console.log("[DEBUG] task", id, t);
+    if(!t)return"";
+    const checked=done.includes(id);
+    const title=t.title||t.name||id;
+    const icon=t.icon||"📌";
+    return`<div class="suggested-item ${checked?'checked':''}">
+      <span class="suggested-icon">${icon}</span>
+      <span>${esc(title)}</span>
+      ${checked?'<span style="margin-left:auto;color:#059669;font-weight:700">✓ 已完成</span>':'<span style="margin-left:auto;color:#64748b;font-size:12px">+'+(t.pts||0)+'分</span>'}
+    </div>`;
+  }).join("");
+}
+*** End Patch
